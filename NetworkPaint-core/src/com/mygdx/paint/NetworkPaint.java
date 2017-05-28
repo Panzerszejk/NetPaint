@@ -33,7 +33,8 @@ public class NetworkPaint extends ApplicationAdapter implements ApplicationListe
         
         //pixmap.setColor(Color.YELLOW);
         //pixmap.drawCircle(pixmap.getWidth()/2, pixmap.getHeight()/2, pixmap.getHeight()/2 - 1);
-        
+        MyInputProcesor inputProcessor = new MyInputProcesor();
+        Gdx.input.setInputProcessor(inputProcessor);
         
         texture = new Texture(pixmap);
         
@@ -90,3 +91,5 @@ public class NetworkPaint extends ApplicationAdapter implements ApplicationListe
 		texture.dispose();
 	}
 }
+
+
