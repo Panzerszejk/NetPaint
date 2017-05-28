@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="/NetworkPaint-core"/>
+	<classpathentry kind="src" path="assets"/>
+	<classpathentry kind="lib" path="/NetworkPaint-core/modules-2/gdx-1.9.6.jar"/>
+	<classpathentry kind="lib" path="/NetworkPaint-core/modules-2/gdx-backend-lwjgl-1.9.6.jar"/>
+	<classpathentry kind="lib" path="/NetworkPaint-core/modules-2/gdx-platform-1.9.6-natives-desktop.jar"/>
+	<classpathentry kind="lib" path="/NetworkPaint-core/modules-2/jinput-2.0.5.jar"/>
+	<classpathentry kind="lib" path="/NetworkPaint-core/modules-2/jinput-platform-2.0.5-natives-linux.jar"/>
+	<classpathentry kind="lib" path="/NetworkPaint-core/modules-2/jinput-platform-2.0.5-natives-osx.jar"/>
+	<classpathentry kind="lib" path="/NetworkPaint-core/modules-2/jinput-platform-2.0.5-natives-windows.jar"/>
+	<classpathentry kind="lib" path="/NetworkPaint-core/modules-2/jlayer-1.0.1-gdx.jar"/>
+	<classpathentry kind="lib" path="/NetworkPaint-core/modules-2/jorbis-0.0.17.jar"/>
+	<classpathentry kind="lib" path="/NetworkPaint-core/modules-2/jutils-1.0.0.jar"/>
+	<classpathentry kind="lib" path="/NetworkPaint-core/modules-2/lwjgl_util-2.9.2.jar"/>
+	<classpathentry kind="lib" path="/NetworkPaint-core/modules-2/lwjgl-2.9.2.jar"/>
+	<classpathentry kind="lib" path="/NetworkPaint-core/modules-2/lwjgl-platform-2.9.2-natives-linux.jar"/>
+	<classpathentry kind="lib" path="/NetworkPaint-core/modules-2/lwjgl-platform-2.9.2-natives-osx.jar"/>
+	<classpathentry kind="lib" path="/NetworkPaint-core/modules-2/lwjgl-platform-2.9.2-natives-windows.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
