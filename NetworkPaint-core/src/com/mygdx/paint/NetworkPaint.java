@@ -3,7 +3,7 @@ package com.mygdx.paint;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
+//import com.badlogic.gdx.Input; // wywalało warning, że niepotrzebne 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -16,32 +16,31 @@ public class NetworkPaint extends ApplicationAdapter implements ApplicationListe
 	private Pixmap pixmap;
 	private Sprite sprite;
 	Texture texture;
-	
+	private MyInputProcesor inputProcesor;	//inputProcesor globalny na całą klasę, żeby używać
+											//jego pól (isPressed) do decydowania o rysowaniu
+	private int previousPointX;	//pole do przechowywania poprzedniej pozycji
+	private int previousPointY;	//wciśniętego kursora, żeby rysować linię od
+								//tejże pozycji, do aktualnej pozycji
 	@Override
 	public void create () {
 		batch = new SpriteBatch();		
 		
 		pixmap = new Pixmap(Gdx.graphics.getWidth(),Gdx.graphics.getHeight(), Pixmap.Format.RGBA8888);
-        //Fill it red
-        pixmap.setColor(Color.WHITE);
-        pixmap.fill();
+        pixmap.setColor(Color.WHITE);	//ustawienie aktualnego koloru na biały
+        pixmap.fill();					//wypełnienie okna aktualnym kolorem
         
-        //Draw two lines forming an X
-        pixmap.setColor(Color.BLACK);
-        //pixmap.drawLine(0, 0, pixmap.getWidth()-1, pixmap.getHeight()-1);
-        //pixmap.drawLine(0, pixmap.getHeight()-1, pixmap.getWidth()-1, 0);
+        pixmap.setColor(Color.BLACK);	//ustawienie aktualnego koloru na czarny
         
-        //pixmap.setColor(Color.YELLOW);
-        //pixmap.drawCircle(pixmap.getWidth()/2, pixmap.getHeight()/2, pixmap.getHeight()/2 - 1);
-        MyInputProcesor inputProcessor = new MyInputProcesor();
-        Gdx.input.setInputProcessor(inputProcessor);
-        
+        inputProcesor = new MyInputProcesor();	//utworzenie procesora obsługi wejść
+        Gdx.input.setInputProcessor(inputProcesor);	//ustawienie procesora wejść naszego gdx
+        											//na ten wlaśnie utworzony
         texture = new Texture(pixmap);
-        
-        //pixmap.dispose();
-        
+                
         sprite = new Sprite(texture);
         sprite.setPosition(0,0);
+        previousPointX = -1;	//nie ma aktualnie "poprzedniej" wartości
+        previousPointY = -1;	//więc w w celu uniknięcia lub wykrycia błędów
+        						//ustawiam niemożliwe wartości
 	}
 
 	@Override
@@ -49,40 +48,27 @@ public class NetworkPaint extends ApplicationAdapter implements ApplicationListe
 		Gdx.gl.glClearColor(255, 255, 255, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         
-        /*if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
-            if(Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT))
-                sprite.translateX(-1f);
-            else
-                sprite.translateX(-10.0f);
+        if(inputProcesor.isPressed){	//jeśli wciśnięty przycisk myszy
+        	if(previousPointX != -1 && previousPointY != -1) //oraz istnieje jakiś poprzedni punkt
+        		//rysujemy linię z poprzedniej pozycji do aktualnej
+        		pixmap.drawLine(previousPointX, previousPointY, inputProcesor.pointX, inputProcesor.pointY);
+        	previousPointX = inputProcesor.pointX;	//ustawiamy aktualną pozycję jako poprzednią
+        	previousPointY = inputProcesor.pointY;
         }
-        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
-            if(Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT))
-                sprite.translateX(1f);
-            else
-                sprite.translateX(10.0f);
-        }*/
-        
-        if(Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
-            //sprite.setPosition(Gdx.input.getX() - sprite.getWidth()/2,
-                   // Gdx.graphics.getHeight() - Gdx.input.getY() - sprite.getHeight()/2);
-        	pixmap.drawPixel(Gdx.input.getX(), Gdx.input.getY());
-        	pixmap.drawCircle(Gdx.input.getX(), Gdx.input.getY(),1);
-        	texture.dispose();
-            texture = new Texture(pixmap);
-            sprite.setTexture(texture);
-        	
+        else{
+            previousPointX = -1;	//jeśli przycisk nie wciśnięty
+            previousPointY = -1;	//to "zerujemy" poprzednią pozycję
         }
-        if(Gdx.input.isButtonPressed(Input.Buttons.RIGHT)){
-        	pixmap.drawPixel(Gdx.input.getX(), Gdx.input.getY());
-        	pixmap.drawCircle(Gdx.input.getX(), Gdx.input.getY(),1);
-        	//texture.dispose();
-            texture.draw(pixmap, 0, 0);
-            sprite.setTexture(texture);
-        }
-        
+    	texture.dispose();
+        texture = new Texture(pixmap);
+        sprite.setTexture(texture);       
         batch.begin();
         sprite.draw(batch);
         batch.end();
+	}
+	
+	public Pixmap getPixmap(){
+		return pixmap;
 	}
 	
 	@Override

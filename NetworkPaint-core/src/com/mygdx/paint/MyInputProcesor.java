@@ -1,9 +1,15 @@
 package com.mygdx.paint;
 
-import com.badlogic.gdx.ApplicationAdapter;
+//import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.InputProcessor;
 
 public class MyInputProcesor implements InputProcessor {
+	boolean isPressed;	//bool do trzymania stanu przycisku myszy
+	int pointX;	//aktualna pozycja wciśniętego kursora
+	int pointY;
+	//prawdopodobnie to wszystko powinno być private
+	//a dostęp przez metodę np. getPointX, getIsPressed
+	//jak ktoś chce, może przerobić :D
     @Override
     public boolean keyDown (int keycode) {
         return false;
@@ -21,18 +27,24 @@ public class MyInputProcesor implements InputProcessor {
 
     @Override
     public boolean touchDown (int x, int y, int pointer, int button) {
-    	System.out.println("Wcisniety");
+    	isPressed = true;	//ustawienie, że przycisk myszy wciśnięty
+    	pointX = x;	//ustawienie początkowej pozycji kursora
+    	pointY = y;
         return false;
     }
 
     @Override
     public boolean touchUp (int x, int y, int pointer, int button) {
-    	System.out.println("Upuszczony");
+    	isPressed = false;	//ustawienie, że przycisk myszy nie wciśnięty
+    	pointX = -1;	//ustawienie niemożliwej pozycji
+    	pointY = -1;	//w celu wykrycia / uniknięcia błędów
         return false;
     }
 
     @Override
     public boolean touchDragged (int x, int y, int pointer) {
+    	pointX = x;	//ustawienie aktualnej pozycji przy przeciąganiu myszą
+    	pointY = y;
         return false;
     }
 
