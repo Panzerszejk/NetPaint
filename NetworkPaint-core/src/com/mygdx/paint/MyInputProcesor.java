@@ -1,15 +1,13 @@
 package com.mygdx.paint;
 
-//import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.InputProcessor;
 
 public class MyInputProcesor implements InputProcessor {
-	boolean isPressed;	//bool do trzymania stanu przycisku myszy
-	int pointX;	//aktualna pozycja wcisniętego kursora
-	int pointY;
-	//prawdopodobnie to wszystko powinno byc private, bo obiektowosc
-	//a dostep przez metode np. getPointX, getIsPressed
-	//jak ktos chce, moze przerobic :D
+	public int[] Xbuffer;
+	public int[] Ybuffer;
+	public boolean[] Sbuffer;
+	public int bufferPointer;
+	
     @Override
     public boolean keyDown (int keycode) {
         return false;
@@ -27,24 +25,27 @@ public class MyInputProcesor implements InputProcessor {
 
     @Override
     public boolean touchDown (int x, int y, int pointer, int button) {
-    	isPressed = true;	//ustawienie, ze przycisk myszy wcisniety
-    	pointX = x;	//ustawienie poczatkowej pozycji kursora
-    	pointY = y;
+    	bufferPointer++;
+    	Sbuffer[bufferPointer] = false;
+    	Xbuffer[bufferPointer] = x;
+    	Ybuffer[bufferPointer] = y;
         return false;
     }
 
     @Override
     public boolean touchUp (int x, int y, int pointer, int button) {
-    	isPressed = false;	//ustawienie, że przycisk myszy nie wcisnięty
-    	pointX = -1;	//ustawienie niemozliwej pozycji
-    	pointY = -1;	//w celu wykrycia / unikniecia bledow
+    	Sbuffer[bufferPointer] = false;
+    	Xbuffer[bufferPointer] = x;
+    	Ybuffer[bufferPointer] = y;
         return false;
     }
 
     @Override
     public boolean touchDragged (int x, int y, int pointer) {
-    	pointX = x;	//ustawienie aktualnej pozycji przy przeciaganiu mysza
-    	pointY = y;
+    	bufferPointer++;
+    	Sbuffer[bufferPointer] = true;
+    	Xbuffer[bufferPointer] = x;
+    	Ybuffer[bufferPointer] = y;
         return false;
     }
 
