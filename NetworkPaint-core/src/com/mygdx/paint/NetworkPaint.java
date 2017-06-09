@@ -4,23 +4,28 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.utils.ScreenUtils;
+
 
 public class NetworkPaint extends ApplicationAdapter {
-	public OrthographicCamera camera;
+	public OrthographicCamera camera; 
 	ShapeRenderer shapeRenderer;
 	public int width;
 	public int height;
 	int brushSize;
 	private MyInputProcesor inputProcesor;	//inputProcesor globalny na cala klase, zeby uzywac
 											//jego pol (isPressed) do decydowania o rysowaniu
-	
+	private SpriteBatch batch;
+    private TextureRegion texture;
+    private Sprite sprite;
+
 	Integer[] PosTab;  //tablica pozycji obecnej
 	Integer[] LastTab;	//tablica pozycji poprzedniej
 	
@@ -28,7 +33,7 @@ public class NetworkPaint extends ApplicationAdapter {
 	public void create () {
         inputProcesor = new MyInputProcesor();	//utworzenie procesora obslugi wejsc
         Gdx.input.setInputProcessor(inputProcesor);	//ustawienie procesora wejsc naszego gdx
-		
+        
 		width = Gdx.graphics.getWidth();
 		height = Gdx.graphics.getHeight();
 		camera = new OrthographicCamera();
@@ -38,6 +43,8 @@ public class NetworkPaint extends ApplicationAdapter {
 		Gdx.graphics.setContinuousRendering(false);
 		brushSize = 10;
 		
+		batch = new SpriteBatch();
+        
 		
 		PosTab= new Integer[3];
         LastTab= new Integer[2];
@@ -50,8 +57,18 @@ public class NetworkPaint extends ApplicationAdapter {
 	public void render () {
 		PosTab=inputProcesor.pollFifo();  //Metoda zdejmuje ostatni element z listy fifo. Jesli elementow nie ma zwraca null
 		
+		texture=ScreenUtils.getFrameBufferTexture();
+		
+		
 		Gdx.gl.glClearColor(255, 255, 255, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        
+        sprite = new Sprite(texture);
+        
+        batch.begin();
+        sprite.draw(batch);
+        batch.end();
+        
         
         if(PosTab!=null){ 		//Musimy sprawdzic czy przypadkiem PosTab nie jest pusty(null) bo inaczej wywali nam NullPointerException
 	        if(PosTab[2]==1) {
@@ -64,7 +81,7 @@ public class NetworkPaint extends ApplicationAdapter {
 	                camera.update();
 	                int x1, x2, y1, y2;
 	        	    shapeRenderer.begin(ShapeType.Filled);
-	                shapeRenderer.setColor(290/255f, 190/255f,190/255f, 1);
+	                shapeRenderer.setColor(190/255f, 190/255f,190/255f, 1);
 	        		
 	        		
 		        	x1 = LastTab[0];
@@ -94,3 +111,4 @@ public class NetworkPaint extends ApplicationAdapter {
 	public void dispose () {
 	}
 }
+
