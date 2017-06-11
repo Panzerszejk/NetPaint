@@ -34,6 +34,7 @@ public class MyInputProcesor implements InputProcessor {
 
     @Override
     public boolean touchUp (int x, int y, int pointer, int button) {
+    	bufferPointer++;
     	Sbuffer[bufferPointer] = false;
     	Xbuffer[bufferPointer] = x;
     	Ybuffer[bufferPointer] = y;
