@@ -67,13 +67,16 @@ public class NetworkPaint extends ApplicationAdapter {
 
 	@Override
 	public void render () {
-		PosTab=inputProcesor.pollFifo();  //Metoda zdejmuje ostatni element z listy fifo. Jesli elementow nie ma zwraca null
-		texture=ScreenUtils.getFrameBufferTexture(); //Pobieramy bufor ekranu do tekstury
 		
+		PosTab=inputProcesor.pollFifo();  //Metoda zdejmuje ostatni element z listy fifo. Jesli elementow nie ma zwraca null
+		
+		//System.out.println(texture);
 		//Czyszczenie ekranu
 		Gdx.gl.glClearColor(255, 255, 255, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        
+        
         //Rysujemy w ka¿dej iteracji to co mamy w teksturze czyli bufor ekranu pobrany w co drugiej iteracji
 		sprite = new Sprite(texture); 
         batch.begin();
@@ -119,8 +122,7 @@ public class NetworkPaint extends ApplicationAdapter {
 	        }
 	    
 
-		
-    
+	texture=ScreenUtils.getFrameBufferTexture(); //Pobieramy bufor ekranu do tekstury
 	}
 	
 	
