@@ -10,7 +10,6 @@ public class MyInputProcesor implements InputProcessor {
     private boolean IsKeyDown=false;
     private Queue<Integer[]> fifo = new LinkedList<Integer[]>();
     Integer[] tab=new Integer[3];
-    boolean a=false;
     
     public Integer[] pollFifo () {
     	Integer[] temp=new Integer[3];
@@ -18,9 +17,6 @@ public class MyInputProcesor implements InputProcessor {
         return temp;
     }
     
-    public boolean iskeypressed(){
-    	return a;
-    }
     
 	@Override
     public boolean keyDown (int keycode) {
@@ -44,8 +40,6 @@ public class MyInputProcesor implements InputProcessor {
         	tab[1]=y;
         	tab[2]=2;
         	fifo.add(tab);
-        
-        a=true;
     	}
     	
     	if(button == Buttons.RIGHT) {
@@ -60,9 +54,6 @@ public class MyInputProcesor implements InputProcessor {
     		tab[1]=y;
     		tab[2]=0;
     		fifo.add(tab);
-    	
-    		a=false;
-    	
         return false;
     }
 
