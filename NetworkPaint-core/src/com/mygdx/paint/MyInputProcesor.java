@@ -1,10 +1,24 @@
 package com.mygdx.paint;
 
-import com.badlogic.gdx.ApplicationAdapter;
+import java.util.LinkedList;
+import java.util.Queue;
+
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.Input.Buttons;
 
 public class MyInputProcesor implements InputProcessor {
-    @Override
+    private boolean IsKeyDown=false;
+    private Queue<Integer[]> fifo = new LinkedList<Integer[]>();
+    Integer[] tab=new Integer[3];
+    
+    public Integer[] pollFifo () {
+    	Integer[] temp=new Integer[3];
+    	temp=fifo.poll();
+        return temp;
+    }
+    
+    
+	@Override
     public boolean keyDown (int keycode) {
         return false;
     }
@@ -21,19 +35,36 @@ public class MyInputProcesor implements InputProcessor {
 
     @Override
     public boolean touchDown (int x, int y, int pointer, int button) {
-    	System.out.println("Wcisniety");
+    	if(button == Buttons.LEFT) {
+    		tab[0]=x;
+        	tab[1]=y;
+        	tab[2]=2;
+        	fifo.add(tab);
+    	}
+    	
+    	if(button == Buttons.RIGHT) {
+    		
+    	}
         return false;
     }
 
     @Override
     public boolean touchUp (int x, int y, int pointer, int button) {
-    	System.out.println("Upuszczony");
+    		tab[0]=x;
+    		tab[1]=y;
+    		tab[2]=0;
+    		fifo.add(tab);
         return false;
     }
 
     @Override
     public boolean touchDragged (int x, int y, int pointer) {
-        return false;
+    	tab[0]=x;
+    	tab[1]=y;
+    	tab[2]=1;
+    	fifo.add(tab);
+    	
+    	return false;
     }
 
     @Override
@@ -42,8 +73,7 @@ public class MyInputProcesor implements InputProcessor {
     }
 
 	@Override
-	public boolean mouseMoved(int arg0, int arg1) {
-		// TODO Auto-generated method stub
+	public boolean mouseMoved(int arg0, int arg1) {	
 		return false;
 	}
 }
