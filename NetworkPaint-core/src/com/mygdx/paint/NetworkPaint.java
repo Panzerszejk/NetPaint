@@ -67,23 +67,20 @@ public class NetworkPaint extends ApplicationAdapter {
 
 	@Override
 	public void render () {
-		
+	
 		PosTab=inputProcesor.pollFifo();  //Metoda zdejmuje ostatni element z listy fifo. Jesli elementow nie ma zwraca null
-		
-		//System.out.println(texture);
+	
 		//Czyszczenie ekranu
 		Gdx.gl.glClearColor(255, 255, 255, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        
-        
-        //Rysujemy w ka¿dej iteracji to co mamy w teksturze czyli bufor ekranu pobrany w co drugiej iteracji
+        //Rysujemy w kaÂ¿dej iteracji to co mamy w teksturze czyli bufor ekranu pobrany w co drugiej iteracji
 		sprite = new Sprite(texture); 
         batch.begin();
         sprite.draw(batch);
         batch.end();
 		
-        
+
 	        if(PosTab!=null){ 		//Musimy sprawdzic czy przypadkiem PosTab nie jest pusty(null) bo inaczej wywali nam NullPointerException
 		        if(PosTab[2]==1) {  //jesli jest rowny 1 czyli przeciagniecie to bedziemy laczyc kolejne punkty
 		        	if(LastTab==null) {  //jesli to pierwszy punkt to zapisujemy do talbicy ponktow poprzednich
@@ -115,12 +112,11 @@ public class NetworkPaint extends ApplicationAdapter {
 		        		shapeRenderer.end();
 		        	}
 		        }
-		        if(PosTab[2]==0) { 	//jesli to coœ innego niz PosTab[2]==1 to znnaczy ze przycisk nie jest przycisniety
+		        if(PosTab[2]==0) { 	//jesli to coÅ“ innego niz PosTab[2]==1 to znnaczy ze przycisk nie jest przycisniety
 		        	LastTab=null; //ciekawe ale jak przypiszemy null to nie musimy usowac obiektu. Robi to za nas garbage colector po jakims czasie
 
 		        }
 	        }
-	    
 
 	texture=ScreenUtils.getFrameBufferTexture(); //Pobieramy bufor ekranu do tekstury
 	}
