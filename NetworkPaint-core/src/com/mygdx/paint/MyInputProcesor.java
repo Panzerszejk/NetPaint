@@ -38,7 +38,7 @@ public class MyInputProcesor implements InputProcessor {
     	if(button == Buttons.LEFT) {
     		tab[0]=x;
         	tab[1]=y;
-        	tab[2]=2;
+        	tab[2]=1;
         	fifo.add(tab);
     	}
     	
@@ -74,6 +74,11 @@ public class MyInputProcesor implements InputProcessor {
 
 	@Override
 	public boolean mouseMoved(int arg0, int arg1) {	
+		tab[0]=arg0;
+    	tab[1]=arg1;
+    	tab[2]=2;
+    	fifo.add(tab);
+		
 		return false;
 	}
 }
