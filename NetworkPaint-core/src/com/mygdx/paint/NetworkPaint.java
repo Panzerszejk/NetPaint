@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -20,6 +21,7 @@ public class NetworkPaint extends ApplicationAdapter {
 	public int width;
 	public int height;
 	byte brushSize;
+
 	private MyInputProcesor inputProcesor;
 	private SpriteBatch batch;
 	private TextureRegion texture;
@@ -32,13 +34,14 @@ public class NetworkPaint extends ApplicationAdapter {
 	public void create () {
 		inputProcesor = new MyInputProcesor();	//utworzenie procesora obslugi wejsc
 		Gdx.input.setInputProcessor(inputProcesor);	//ustawienie procesora wejsc na ten z MyInputProcessor
-
+    
 		width = Gdx.graphics.getWidth();
 		height = Gdx.graphics.getHeight();
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, width, height);
 		camera.update();
 		shapeRenderer = new ShapeRenderer();
+
 		Gdx.graphics.setContinuousRendering(false); //wylacza ciagle renderowanie. Renderuje gdy pojawi sie jakis event
 		brushSize = 10;
 
@@ -60,6 +63,7 @@ public class NetworkPaint extends ApplicationAdapter {
 		Gdx.graphics.setCursor(Gdx.graphics.newCursor(pm, brushSize/2, brushSize/2));
 		pm.dispose();
 
+
 		PosTab= new Integer[3];
 		LastTab= new Integer[2];
 
@@ -67,6 +71,7 @@ public class NetworkPaint extends ApplicationAdapter {
 		LastTab=null;
 
 		texture=ScreenUtils.getFrameBufferTexture(); //sciagam teksture na wstepie zeby nie wywalilo nam NullPointerException przy pierwszym rysowaniu
+
 	}
 
 	@Override
@@ -74,9 +79,11 @@ public class NetworkPaint extends ApplicationAdapter {
 
 		PosTab=inputProcesor.pollFifo();  //Metoda zdejmuje ostatni element z listy fifo. Jesli elementow nie ma zwraca null
 
+
 		//Czyszczenie ekranu
 		Gdx.gl.glClearColor(255, 255, 255, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
 
 		//Rysujemy w kazdej iteracji to co mamy w teksturze
 		sprite = new Sprite(texture);
@@ -123,6 +130,7 @@ public class NetworkPaint extends ApplicationAdapter {
 	@Override
 	public void dispose () {
 		batch.dispose();
+
 
 	}
 }
