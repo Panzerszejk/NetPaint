@@ -7,7 +7,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Input.Buttons;
 
 public class MyInputProcesor implements InputProcessor {
-    private boolean IsKeyDown=false;
+
     private Queue<Integer[]> fifo = new LinkedList<Integer[]>();
     Integer[] tab=new Integer[3];
     
@@ -61,7 +61,8 @@ public class MyInputProcesor implements InputProcessor {
     public boolean touchDragged (int x, int y, int pointer) {
     	tab[0]=x;
     	tab[1]=y;
-    	tab[2]=1;
+    	tab[2]=2;
+
     	fifo.add(tab);
     	
     	return false;
@@ -74,9 +75,10 @@ public class MyInputProcesor implements InputProcessor {
 
 	@Override
 	public boolean mouseMoved(int arg0, int arg1) {	
-		tab[0]=arg0;
-    	tab[1]=arg1;
-    	tab[2]=2;
+		  tab[0]=arg0;
+      tab[1]=arg1;
+      tab[2]=3;
+
     	fifo.add(tab);
 		
 		return false;
