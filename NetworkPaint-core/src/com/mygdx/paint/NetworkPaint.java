@@ -42,7 +42,7 @@ public class NetworkPaint extends ApplicationAdapter {
 		shapeRenderer = new ShapeRenderer();
 
 		Gdx.graphics.setContinuousRendering(false); //wylacza ciagle renderowanie. Renderuje gdy pojawi sie jakis event
-		brushSize = 10;
+		brushSize = 20;
 
 		shapeRenderer.setProjectionMatrix(camera.combined);
 		batch = new SpriteBatch();
@@ -115,7 +115,7 @@ public class NetworkPaint extends ApplicationAdapter {
 			if(PosTab[2] == 1){ //Jesli przycisk myszy klikniety
 				camera.update();
 				shapeRenderer.begin(ShapeType.Filled);
-				shapeRenderer.setColor(0.75f, 0.75f, 0.75f, 1f);
+				shapeRenderer.setColor(0.5f, 0.75f, 0.75f, 1f);
 				shapeRenderer.circle(PosTab[0],height-PosTab[1],brushSize/2); //Rysuj pojedynczy punkt
 				shapeRenderer.end();
 			}
