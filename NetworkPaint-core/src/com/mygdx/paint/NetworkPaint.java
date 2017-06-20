@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -43,10 +42,9 @@ public class NetworkPaint extends ApplicationAdapter {
 		shapeRenderer = new ShapeRenderer();
 
 		Gdx.graphics.setContinuousRendering(false); //wylacza ciagle renderowanie. Renderuje gdy pojawi sie jakis event
-		brushSize = 10;
+		brushSize = 20;
 
 		shapeRenderer.setProjectionMatrix(camera.combined);
-
 		batch = new SpriteBatch();
 
 		//obliczanie najblizszej wiekszej potegi 2. Kod ze stacka :D
@@ -81,13 +79,14 @@ public class NetworkPaint extends ApplicationAdapter {
 
 
 		//Czyszczenie ekranu
-		Gdx.gl.glClearColor(255, 255, 255, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		Gdx.gl.glClearColor(1f, 1f, 1f, 1f);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
 
 		//Rysujemy w kazdej iteracji to co mamy w teksturze
 		sprite = new Sprite(texture);
 		batch.begin();
+		batch.setBlendFunction(GL20.GL_ONE,GL20.GL_ONE_MINUS_SRC_ALPHA); //Zmiana metod laczenia obrazu, zeby nie przyciemnialo kolorow
 		//batch.setColor(190/255f, 190/255f, 190/255f, 0f);
 		sprite.draw(batch);
 		batch.end();
@@ -102,7 +101,7 @@ public class NetworkPaint extends ApplicationAdapter {
 					y1 = height - LastTab[1];
 					y2 = height - PosTab[1];
 					shapeRenderer.begin(ShapeType.Filled);
-					shapeRenderer.setColor(190/255f, 190/255f,190/255f, 1);
+					shapeRenderer.setColor(0.5f, 0.75f, 0.75f, 1f);
 					//System.out.println("("+x1+" "+y1+") , ("+x2+" "+y2+")");
 					shapeRenderer.circle(x1,y1,brushSize/2);
 					shapeRenderer.rectLine(x1,y1,x2,y2,brushSize); //Rysujemy "zaokralona" linie
@@ -116,7 +115,7 @@ public class NetworkPaint extends ApplicationAdapter {
 			if(PosTab[2] == 1){ //Jesli przycisk myszy klikniety
 				camera.update();
 				shapeRenderer.begin(ShapeType.Filled);
-				shapeRenderer.setColor(190/255f, 190/255f,190/255f, 1);
+				shapeRenderer.setColor(0.5f, 0.75f, 0.75f, 1f);
 				shapeRenderer.circle(PosTab[0],height-PosTab[1],brushSize/2); //Rysuj pojedynczy punkt
 				shapeRenderer.end();
 			}

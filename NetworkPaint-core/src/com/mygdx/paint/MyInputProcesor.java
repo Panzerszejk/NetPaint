@@ -76,10 +76,10 @@ public class MyInputProcesor implements InputProcessor {
 	@Override
 	public boolean mouseMoved(int arg0, int arg1) {	
 		  tab[0]=arg0;
-      tab[1]=arg1;
-      tab[2]=3;
+		  tab[1]=arg1;
+		  tab[2]=3;
 
-    	fifo.add(tab);
+		  fifo.add(tab);
 		
 		return false;
 	}
