@@ -68,9 +68,9 @@ public class NetworkPaint extends ApplicationAdapter {
 
 		texture=ScreenUtils.getFrameBufferTexture(); //sciagam teksture na wstepie zeby nie wywalilo nam NullPointerException przy pierwszym rysowaniu
 		
-		ServerThread server=new ServerThread();  //uruchamianie serwera i klienta
+		//ServerThread server=new ServerThread();  //uruchamianie serwera i klienta
 		ClientThread client=new ClientThread();
-		server.start();
+		//server.start();
 		client.start();
 	}
 
