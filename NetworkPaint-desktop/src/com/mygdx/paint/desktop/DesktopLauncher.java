@@ -1,5 +1,7 @@
 package com.mygdx.paint.desktop;
 
+import java.util.Scanner;
+
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.mygdx.paint.NetworkPaint;
@@ -10,6 +12,15 @@ public class DesktopLauncher {
 		config.resizable = false;
 		//config.height = 800;
 		//config.width = 1280;
-		new LwjglApplication(new NetworkPaint(), config);
+		NetworkPaint paint=new NetworkPaint();
+		System.out.println("Are you a server or client?  S/C: ");
+		Scanner scanner = new Scanner(System.in);
+		String ClientServerSelect=scanner.nextLine();
+		System.out.println("Enter server IPv4: ");
+		String ServerClientIP=scanner.nextLine();
+		scanner.close();
+		paint.ClientServerSelect=ClientServerSelect;
+		paint.ServerClientIP=ServerClientIP;
+		new LwjglApplication(paint, config);
 	}
 }

@@ -24,7 +24,9 @@ public class NetworkPaint extends ApplicationAdapter {
 	private SpriteBatch batch;
 	private TextureRegion texture;
 	private Sprite sprite;
-
+	public String ClientServerSelect;
+	public String ServerClientIP;
+	
 	Point current;  //tablica pozycji obecnej
 	Point previous;	//tablica pozycji poprzedniej
 	
@@ -74,13 +76,18 @@ public class NetworkPaint extends ApplicationAdapter {
 		
 
 		
-	texture=ScreenUtils.getFrameBufferTexture(); //sciagam teksture na wstepie zeby nie wywalilo nam NullPointerException przy pierwszym rysowaniu
+		texture=ScreenUtils.getFrameBufferTexture(); //sciagam teksture na wstepie zeby nie wywalilo nam NullPointerException przy pierwszym rysowaniu
 		
-		//ServerThread server=new ServerThread();  //uruchamianie serwera i klienta
-		//ClientThread client=new ClientThread();
-		//server.start();
-		//client.start();
-
+		if(ClientServerSelect=="C"){  //wybor klient/serwer
+			ClientThread client=new ClientThread();
+			client.IPv4=ServerClientIP;
+			client.start();
+		}
+		else if(ClientServerSelect=="S"){
+			ServerThread server=new ServerThread();  
+			server.IPv4=ServerClientIP;
+			server.start();
+		}
 	}
 
 	@Override

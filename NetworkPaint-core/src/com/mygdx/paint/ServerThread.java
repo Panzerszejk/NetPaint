@@ -13,13 +13,13 @@ public class ServerThread extends Thread{
     SocketHints socketHints = new SocketHints();
     ServerSocket server;
     Socket socket;
-    public byte[] ReceiveMsg = new byte[1024];
-    public byte[] SendMsg = new byte[1024];
+    public byte[] receiveMsg = new byte[1024];
+    public byte[] sendMsg = new byte[1024];
     public String IPv4 = new String();
     public void run()
     {
     	try{
-    		hints.acceptTimeout=10000;
+    		hints.acceptTimeout=60000;
     		socketHints = new SocketHints();
     		server = Gdx.net.newServerSocket(Protocol.TCP, IPv4 , 8783, hints);   
     		socket  = server.accept(socketHints);
@@ -32,8 +32,8 @@ public class ServerThread extends Thread{
             if(socket != null)
             {
                 try {
-                    socket.getInputStream().read(ReceiveMsg, 0, ReceiveMsg.length);
-                    socket.getOutputStream().write(SendMsg);                                                                          //---
+                    socket.getInputStream().read(receiveMsg, 0, receiveMsg.length);
+                    socket.getOutputStream().write(sendMsg);                                                                          //---
 
                 } catch (IOException e) {
                     e.printStackTrace();
