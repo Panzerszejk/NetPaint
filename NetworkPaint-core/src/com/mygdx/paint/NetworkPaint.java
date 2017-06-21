@@ -72,6 +72,7 @@ public class NetworkPaint extends ApplicationAdapter {
 		inputProcesor.set_kolor((byte)255, (byte)255, (byte)255);
 		Gdx.input.setInputProcessor(inputProcesor);	//ustawienie procesora wejsc na ten z MyInputProcessor
 		
+
 		
 	texture=ScreenUtils.getFrameBufferTexture(); //sciagam teksture na wstepie zeby nie wywalilo nam NullPointerException przy pierwszym rysowaniu
 		
@@ -79,6 +80,7 @@ public class NetworkPaint extends ApplicationAdapter {
 		//ClientThread client=new ClientThread();
 		//server.start();
 		//client.start();
+
 	}
 
 	@Override

@@ -1,7 +1,6 @@
 package com.mygdx.paint;
 
 import java.io.IOException;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net.Protocol;
 import com.badlogic.gdx.net.ServerSocket;
@@ -16,12 +15,13 @@ public class ServerThread extends Thread{
     Socket socket;
     public byte[] ReceiveMsg = new byte[1024];
     public byte[] SendMsg = new byte[1024];
+    public String IPv4 = new String();
     public void run()
     {
     	try{
     		hints.acceptTimeout=10000;
     		socketHints = new SocketHints();
-    		server = Gdx.net.newServerSocket(Protocol.TCP, "localhost", 8783, hints);   
+    		server = Gdx.net.newServerSocket(Protocol.TCP, IPv4 , 8783, hints);   
     		socket  = server.accept(socketHints);
     		Thread.sleep(500);
         } catch (Exception e) {
@@ -31,7 +31,6 @@ public class ServerThread extends Thread{
         {
             if(socket != null)
             {
-
                 try {
                     socket.getInputStream().read(ReceiveMsg, 0, ReceiveMsg.length);
                     socket.getOutputStream().write(SendMsg);                                                                          //---
