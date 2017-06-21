@@ -26,5 +26,26 @@ public class Point {
 	this.b = b;
 	}
 	
+	public void copy(Point point)
+	{
+		this.x = point.x;
+		this.y = point.y;
+		this.brush_size = point.brush_size;
+		this.type = point.type;
+		this.r = point.r;
+		this.g = point.g;
+		this.b = point.b;
+	}
+	
+	public Point(Point point)
+	{
+		this.x = point.x;
+		this.y = point.y;
+		this.brush_size = point.brush_size;
+		this.type = point.type;
+		this.r = point.r;
+		this.g = point.g;
+		this.b = point.b;
+	}
 }
 

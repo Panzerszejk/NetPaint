@@ -14,7 +14,7 @@ public class MyInputProcesor implements InputProcessor {
     private byte r;
     private byte g;
     private byte b;
-    
+    private Point point = new Point(0,0,(byte)0,(byte)5,(byte)255,(byte)255,(byte)255);
     public Point pollFifo () {
     	return fifo.poll();
     }
@@ -49,7 +49,10 @@ public class MyInputProcesor implements InputProcessor {
     @Override
     public boolean touchDown (int x, int y, int pointer, int button) {
     	if(button == Buttons.LEFT) {
-    		fifo.add(new Point(x,y,brush_size,(byte)1,r,g,b));
+    		point.x = x;
+    		point.y = y;
+    		point.type = (byte)1;
+    		fifo.add(point);
     	}
     	
     	if(button == Buttons.RIGHT) {
@@ -60,13 +63,19 @@ public class MyInputProcesor implements InputProcessor {
 
     @Override
     public boolean touchUp (int x, int y, int pointer, int button) {
-    		fifo.add(new Point(x,y,brush_size,(byte)0,r,g,b));
+    	point.x = x;
+		point.y = y;
+		point.type = (byte)0;
+		fifo.add(point);
     	return false;
     }
 
     @Override
     public boolean touchDragged (int x, int y, int pointer) {
-    	fifo.add(new Point(x,y,brush_size,(byte)2,r,g,b));
+    	point.x = x;
+		point.y = y;
+		point.type = (byte)2;
+		fifo.add(point);
     	return false;
     }
 
@@ -77,7 +86,10 @@ public class MyInputProcesor implements InputProcessor {
 
 	@Override
 	public boolean mouseMoved(int x, int y) {	
-		fifo.add(new Point(x,y,brush_size,(byte)3,r,g,b));  
+		point.x = x;
+		point.y = y;
+		point.type = (byte)3;
+		fifo.add(point); 
 		return false;
 	}
 }

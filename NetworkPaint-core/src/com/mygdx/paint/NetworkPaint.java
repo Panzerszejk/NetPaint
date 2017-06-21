@@ -58,6 +58,7 @@ public class NetworkPaint extends ApplicationAdapter {
 		shapeRenderer = new ShapeRenderer();
 
 		Gdx.graphics.setContinuousRendering(false); //wylacza ciagle renderowanie. Renderuje gdy pojawi sie jakis event
+		//zmienic na true!!!
 		brushSize = 20;
 
 		shapeRenderer.setProjectionMatrix(camera.combined);
@@ -135,11 +136,11 @@ public class NetworkPaint extends ApplicationAdapter {
 				}
 			}
 			else{
-				//previous = new Point; //Jesli LastTab jest null, to stworz nowy
+				previous = new Point(current); //Jesli LastTab jest null, to stworz nowy
 			
 		
 			}
-			previous = current;  //Przepisuje punkt za kazdym razem, zeby uniknac problemow z nullem
+			previous.copy(current);  //Przepisuje punkt za kazdym razem, zeby uniknac problemow z nullem
 		}
 		texture=ScreenUtils.getFrameBufferTexture(); //Pobieramy bufor ekranu do tekstury
 	}
