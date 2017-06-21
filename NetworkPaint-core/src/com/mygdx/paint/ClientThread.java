@@ -13,7 +13,7 @@ public class ClientThread extends Thread{
     public String IPv4 = new String();
     public void run(){
         SocketHints hints = new SocketHints();
-        hints.connectTimeout = 10000;
+        hints.connectTimeout = 60000;
         try {
            socket = Gdx.net.newClientSocket(Protocol.TCP, IPv4 , 8783, hints );
            Thread.sleep(500, 0);

@@ -24,7 +24,8 @@ public class NetworkPaint extends ApplicationAdapter {
 	private SpriteBatch batch;
 	private TextureRegion texture;
 	private Sprite sprite;
-
+	public String ClientServerSelect;
+	public String ServerClientIP;
 	Integer[] PosTab;  //tablica pozycji obecnej
 	Integer[] LastTab;	//tablica pozycji poprzedniej
 
@@ -68,17 +69,24 @@ public class NetworkPaint extends ApplicationAdapter {
 
 		texture=ScreenUtils.getFrameBufferTexture(); //sciagam teksture na wstepie zeby nie wywalilo nam NullPointerException przy pierwszym rysowaniu
 		
-		//ServerThread server=new ServerThread();  //uruchamianie serwera i klienta
-		ClientThread client=new ClientThread();
-		//server.start();
-		client.start();
+		if(ClientServerSelect=="C"){  //wybor klient/serwer
+			ClientThread client=new ClientThread();
+			client.IPv4=ServerClientIP;
+			client.start();
+		}
+		else if(ClientServerSelect=="S"){
+			ServerThread server=new ServerThread();  
+			server.IPv4=ServerClientIP;
+			server.start();
+		}
 	}
 
 	@Override
 	public void render () {
 
 		PosTab=inputProcesor.pollFifo();  //Metoda zdejmuje ostatni element z listy fifo. Jesli elementow nie ma zwraca null
-
+		
+		
 		
 		//Czyszczenie ekranu
 		Gdx.gl.glClearColor(1f, 1f, 1f, 1f);
