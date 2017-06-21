@@ -25,13 +25,28 @@ public class NetworkPaint extends ApplicationAdapter {
 	private TextureRegion texture;
 	private Sprite sprite;
 
-	Integer[] PosTab;  //tablica pozycji obecnej
-	Integer[] LastTab;	//tablica pozycji poprzedniej
+	Point current;  //tablica pozycji obecnej
+	Point previous;	//tablica pozycji poprzedniej
+	
+	public void set_kursor(byte rozmiar)
+	{
+		byte brushSizePow2=rozmiar;
+		brushSizePow2--;
+		brushSizePow2 |= brushSizePow2 >> 1;
+		brushSizePow2 |= brushSizePow2 >> 2;
+		brushSizePow2 |= brushSizePow2 >> 4; //zaokraglenie dziala do 4 bitow + 1. Jak bedziemy robic wieksza wielkosc pedzla niz 32 to trzeba bedzie dodac jeszcze jedna linijke
+		brushSizePow2++;
 
+		Pixmap pm = new Pixmap(brushSizePow2,brushSizePow2,Pixmap.Format.RGBA8888); //rozmiar kursora musi byc potega 2
+		pm.setColor(Color.BLACK);
+		pm.drawCircle(rozmiar/2, rozmiar/2, rozmiar/2);
+		Gdx.graphics.setCursor(Gdx.graphics.newCursor(pm, rozmiar/2, rozmiar/2));
+		pm.dispose();
+	}
+	
 	@Override
 	public void create () {
-		inputProcesor = new MyInputProcesor();	//utworzenie procesora obslugi wejsc
-		Gdx.input.setInputProcessor(inputProcesor);	//ustawienie procesora wejsc na ten z MyInputProcessor
+		
 		
 		width = Gdx.graphics.getWidth();
 		height = Gdx.graphics.getHeight();
@@ -45,39 +60,31 @@ public class NetworkPaint extends ApplicationAdapter {
 
 		shapeRenderer.setProjectionMatrix(camera.combined);
 		batch = new SpriteBatch();
-
+		
+		current = null;
+		previous = null;
 		//obliczanie najblizszej wiekszej potegi 2. Kod ze stacka :D
-		byte brushSizePow2=brushSize;
-		brushSizePow2--;
-		brushSizePow2 |= brushSizePow2 >> 1;
-		brushSizePow2 |= brushSizePow2 >> 2;
-		brushSizePow2 |= brushSizePow2 >> 4; //zaokraglenie dziala do 4 bitow + 1. Jak bedziemy robic wieksza wielkosc pedzla niz 32 to trzeba bedzie dodac jeszcze jedna linijke
-		brushSizePow2++;
-
-		Pixmap pm = new Pixmap(brushSizePow2,brushSizePow2,Pixmap.Format.RGBA8888); //rozmiar kursora musi byc potega 2
-		pm.setColor(Color.BLACK);
-		pm.drawCircle(brushSize/2, brushSize/2, brushSize/2);
-		Gdx.graphics.setCursor(Gdx.graphics.newCursor(pm, brushSize/2, brushSize/2));
-		pm.dispose();
+	
+		set_kursor(brushSize); //wywolanie funkcji obslugujacej zmiane kursora
 		
-		PosTab= new Integer[3];
-		LastTab= new Integer[2];
-
-		PosTab=null;
-		LastTab=null;
-
-		texture=ScreenUtils.getFrameBufferTexture(); //sciagam teksture na wstepie zeby nie wywalilo nam NullPointerException przy pierwszym rysowaniu
+		inputProcesor = new MyInputProcesor();	//utworzenie procesora obslugi wejsc
+		inputProcesor.set_brush_size(brushSize);
+		inputProcesor.set_kolor((byte)255, (byte)255, (byte)255);
+		Gdx.input.setInputProcessor(inputProcesor);	//ustawienie procesora wejsc na ten z MyInputProcessor
 		
-		ServerThread server=new ServerThread();  //uruchamianie serwera i klienta
-		ClientThread client=new ClientThread();
-		server.start();
-		client.start();
+		
+	texture=ScreenUtils.getFrameBufferTexture(); //sciagam teksture na wstepie zeby nie wywalilo nam NullPointerException przy pierwszym rysowaniu
+		
+		//ServerThread server=new ServerThread();  //uruchamianie serwera i klienta
+		//ClientThread client=new ClientThread();
+		//server.start();
+		//client.start();
 	}
 
 	@Override
 	public void render () {
 
-		PosTab=inputProcesor.pollFifo();  //Metoda zdejmuje ostatni element z listy fifo. Jesli elementow nie ma zwraca null
+		current=inputProcesor.pollFifo();  //Metoda zdejmuje ostatni element z listy fifo. Jesli elementow nie ma zwraca null
 
 		
 		//Czyszczenie ekranu
@@ -93,15 +100,15 @@ public class NetworkPaint extends ApplicationAdapter {
 		sprite.draw(batch);
 		batch.end();
 
-		if(PosTab != null){ //Musimy sprawdzic czy przypadkiem PosTab nie jest pusty(null) bo inaczej wywali nam NullPointerException
-			if(LastTab != null){ //Sprawdzenie, czy nie jest to pierwszy punkt
-				if(PosTab[2] == 2){ //Jesli mysz jest przeciagana
+		if(current != null){ //Musimy sprawdzic czy przypadkiem PosTab nie jest pusty(null) bo inaczej wywali nam NullPointerException
+			if(previous != null){ //Sprawdzenie, czy nie jest to pierwszy punkt
+				if(current.type == 2){ //Jesli mysz jest przeciagana
 					camera.update();
 					int x1, x2, y1, y2;
-					x1 = LastTab[0];
-					x2 = PosTab[0];
-					y1 = height - LastTab[1];
-					y2 = height - PosTab[1];
+					x1 = previous.x;
+					x2 = current.x;
+					y1 = height - previous.y;
+					y2 = height - current.y;
 					shapeRenderer.begin(ShapeType.Filled);
 					shapeRenderer.setColor(0.5f, 0.75f, 0.75f, 1f);
 					//System.out.println("("+x1+" "+y1+") , ("+x2+" "+y2+")");
@@ -110,19 +117,20 @@ public class NetworkPaint extends ApplicationAdapter {
 					shapeRenderer.circle(x2,y2,brushSize/2);
 					shapeRenderer.end();
 				}
+				if(previous.type == 1){ //Jesli przycisk myszy klikniety
+					camera.update();
+					shapeRenderer.begin(ShapeType.Filled);
+					shapeRenderer.setColor(0.5f, 0.75f, 0.75f, 1f);
+					shapeRenderer.circle(current.x,height-current.y,brushSize/2); //Rysuj pojedynczy punkt
+					shapeRenderer.end();
+				}
 			}
 			else{
-				LastTab = new Integer[3]; //Jesli LastTab jest null, to stworz nowy
+				//previous = new Point; //Jesli LastTab jest null, to stworz nowy
+			
+		
 			}
-			if(PosTab[2] == 1){ //Jesli przycisk myszy klikniety
-				camera.update();
-				shapeRenderer.begin(ShapeType.Filled);
-				shapeRenderer.setColor(0.5f, 0.75f, 0.75f, 1f);
-				shapeRenderer.circle(PosTab[0],height-PosTab[1],brushSize/2); //Rysuj pojedynczy punkt
-				shapeRenderer.end();
-			}
-			LastTab[0] = PosTab[0];
-			LastTab[1] = PosTab[1]; //Przepisuje punkt za kazdym razem, zeby uniknac problemow z nullem
+			previous = current;  //Przepisuje punkt za kazdym razem, zeby uniknac problemow z nullem
 		}
 		texture=ScreenUtils.getFrameBufferTexture(); //Pobieramy bufor ekranu do tekstury
 	}
