@@ -58,7 +58,7 @@ public class NetworkPaint extends ApplicationAdapter {
 		shapeRenderer = new ShapeRenderer();
 
 		Gdx.graphics.setContinuousRendering(false); //wylacza ciagle renderowanie. Renderuje gdy pojawi sie jakis event
-		//zmienic na true!!!
+		//zmienic na true, przy last wersji!!!
 		brushSize = 20;
 
 		shapeRenderer.setProjectionMatrix(camera.combined);
