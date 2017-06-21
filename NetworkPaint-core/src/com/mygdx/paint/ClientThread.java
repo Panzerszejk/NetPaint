@@ -25,8 +25,8 @@ public class ClientThread extends Thread{
             if(socket!=null)
             {
                 try {
-                    socket.getOutputStream().write(SendMsg); // wiadomosc wysylana
-                    socket.getInputStream().read(ReceiveMsg, 0, ReceiveMsg.length); //odebrana od servera
+                    socket.getOutputStream().write(sendMsg); // wiadomosc wysylana
+                    socket.getInputStream().read(receiveMsg, 0, receiveMsg.length); //odebrana od servera
                 } catch (IOException e) {
                     e.printStackTrace();
                     socket.dispose();
