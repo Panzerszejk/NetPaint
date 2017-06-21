@@ -14,27 +14,27 @@ public class ServerThread extends Thread{
     SocketHints socketHints = new SocketHints();
     ServerSocket server;
     Socket socket;
-    byte[] ReceiveMsg = new byte[1024];
-    byte[] SendMsg = new byte[1024];
+    public byte[] ReceiveMsg = new byte[1024];
+    public byte[] SendMsg = new byte[1024];
     public void run()
     {
-        int tmp = 1;
+    	try{
+    		hints.acceptTimeout=10000;
+    		socketHints = new SocketHints();
+    		server = Gdx.net.newServerSocket(Protocol.TCP, "localhost", 8783, hints);   
+    		socket  = server.accept(socketHints);
+    		Thread.sleep(500);
+        } catch (Exception e) {
+     	   e.printStackTrace();
+        }
 		while(true)
         {
-			if(tmp == 1) 
-            {
-                tmp=2;
-                server = Gdx.net.newServerSocket(Protocol.TCP, "localhost", 8783, hints);   
-                socket  = server.accept(socketHints);
-                hints.acceptTimeout = 12000;
-            }
-
             if(socket != null)
             {
 
                 try {
                     socket.getInputStream().read(ReceiveMsg, 0, ReceiveMsg.length);
-                    socket.getOutputStream().write( (SendMsg).length);                                                                          //---
+                    socket.getOutputStream().write(SendMsg);                                                                          //---
 
                 } catch (IOException e) {
                     e.printStackTrace();

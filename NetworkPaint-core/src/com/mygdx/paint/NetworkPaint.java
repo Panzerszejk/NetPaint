@@ -16,11 +16,10 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 public class NetworkPaint extends ApplicationAdapter {
 	public OrthographicCamera camera;
-	ShapeRenderer shapeRenderer;
+	ShapeRenderer shapeRenderer; 
 	public int width;
 	public int height;
 	byte brushSize;
-
 	private MyInputProcesor inputProcesor;
 	private SpriteBatch batch;
 	private TextureRegion texture;
@@ -33,7 +32,7 @@ public class NetworkPaint extends ApplicationAdapter {
 	public void create () {
 		inputProcesor = new MyInputProcesor();	//utworzenie procesora obslugi wejsc
 		Gdx.input.setInputProcessor(inputProcesor);	//ustawienie procesora wejsc na ten z MyInputProcessor
-    
+		
 		width = Gdx.graphics.getWidth();
 		height = Gdx.graphics.getHeight();
 		camera = new OrthographicCamera();
@@ -60,8 +59,7 @@ public class NetworkPaint extends ApplicationAdapter {
 		pm.drawCircle(brushSize/2, brushSize/2, brushSize/2);
 		Gdx.graphics.setCursor(Gdx.graphics.newCursor(pm, brushSize/2, brushSize/2));
 		pm.dispose();
-
-
+		
 		PosTab= new Integer[3];
 		LastTab= new Integer[2];
 
@@ -69,7 +67,11 @@ public class NetworkPaint extends ApplicationAdapter {
 		LastTab=null;
 
 		texture=ScreenUtils.getFrameBufferTexture(); //sciagam teksture na wstepie zeby nie wywalilo nam NullPointerException przy pierwszym rysowaniu
-
+		
+		ServerThread server=new ServerThread();  //uruchamianie serwera i klienta
+		ClientThread client=new ClientThread();
+		server.start();
+		client.start();
 	}
 
 	@Override
@@ -77,7 +79,7 @@ public class NetworkPaint extends ApplicationAdapter {
 
 		PosTab=inputProcesor.pollFifo();  //Metoda zdejmuje ostatni element z listy fifo. Jesli elementow nie ma zwraca null
 
-
+		
 		//Czyszczenie ekranu
 		Gdx.gl.glClearColor(1f, 1f, 1f, 1f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
