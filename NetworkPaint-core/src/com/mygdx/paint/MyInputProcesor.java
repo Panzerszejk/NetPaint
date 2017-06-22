@@ -12,7 +12,7 @@ public class MyInputProcesor implements InputProcessor {
 
     private Queue<Point> fifo = new LinkedList<Point>();
    
-    private Point point = new Point(0,0,(byte)0,(byte)5,(byte)255,(byte)255,(byte)255);
+    private Point point = new Point(0,0,(byte)0,(byte)5,(byte)0,(byte)0,(byte)0);
     
     public Point pollFifo () {
     	return fifo.poll();
@@ -29,6 +29,11 @@ public class MyInputProcesor implements InputProcessor {
     point.r = r;
     point.g = g;
     point.b = b;
+    }
+    
+    public byte get_brush_size()
+    {
+    	return point.brush_size;
     }
     
 	@Override
@@ -105,6 +110,8 @@ public class MyInputProcesor implements InputProcessor {
 
     @Override
     public boolean keyTyped (char character) {
+    	if(character == '+' || character == '=') point.brush_size++;
+    	else if (character == '-') point.brush_size--;
     	
     	return false;
     }

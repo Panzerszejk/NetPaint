@@ -20,7 +20,7 @@ public class NetworkPaint extends ApplicationAdapter {
 	
 	public int width;
 	public int height;
-	byte brushSize;
+	
 	
 	private MyInputProcesor inputProcesor;
 	private SpriteBatch batch;
@@ -62,7 +62,7 @@ public class NetworkPaint extends ApplicationAdapter {
 
 		Gdx.graphics.setContinuousRendering(false); //wylacza ciagle renderowanie. Renderuje gdy pojawi sie jakis event
 		//zmienic na true, przy last wersji!!!
-		brushSize = 20;
+		
 
 		shapeRenderer.setProjectionMatrix(camera.combined);
 		batch = new SpriteBatch();
@@ -70,12 +70,14 @@ public class NetworkPaint extends ApplicationAdapter {
 		current = null;
 		previous = null;
 		//obliczanie najblizszej wiekszej potegi 2. Kod ze stacka :D
-	
-		set_kursor(brushSize); //wywolanie funkcji obslugujacej zmiane kursora
 		
 		inputProcesor = new MyInputProcesor();	//utworzenie procesora obslugi wejsc
-		
 		Gdx.input.setInputProcessor(inputProcesor);	//ustawienie procesora wejsc na ten z MyInputProcessor
+		set_kursor((byte)5); //wywolanie funkcji obslugujacej zmiane kursora
+		
+		
+		
+		
 		
 
 		
@@ -124,16 +126,16 @@ public class NetworkPaint extends ApplicationAdapter {
 					shapeRenderer.begin(ShapeType.Filled);
 					shapeRenderer.setColor((current.r & 0xff)/255f, (current.g & 0xff)/255f, (current.b & 0xff)/255f, 1f);
 					
-					shapeRenderer.circle(x1,y1,brushSize/2);
-					shapeRenderer.rectLine(x1,y1,x2,y2,brushSize); //Rysujemy "zaokralona" linie
-					shapeRenderer.circle(x2,y2,brushSize/2);
+					shapeRenderer.circle(x1,y1,current.brush_size/2);
+					shapeRenderer.rectLine(x1,y1,x2,y2,current.brush_size); //Rysujemy "zaokralona" linie
+					shapeRenderer.circle(x2,y2,current.brush_size/2);
 					shapeRenderer.end();
 				}
 				if(previous.type == 1){ //Jesli przycisk myszy klikniety
 					camera.update();
 					shapeRenderer.begin(ShapeType.Filled);
 					shapeRenderer.setColor((current.r & 0xff)/255f, (current.g & 0xff)/255f, (current.b & 0xff)/255f, 1f);
-					shapeRenderer.circle(current.x,height-current.y,brushSize/2); //Rysuj pojedynczy punkt
+					shapeRenderer.circle(current.x,height-current.y,current.brush_size/2); //Rysuj pojedynczy punkt
 					shapeRenderer.end();
 				}
 			}
