@@ -60,7 +60,9 @@ public class NetworkPaint extends ApplicationAdapter {
 			bytearray[i]=bytesX[i];
 		}
 		for(int i=4;i<8;i++){		//Y to bytes
-			bytearray[i]=bytesY[i];
+			int j=0;
+			bytearray[i]=bytesY[j];
+			j++;
 		}
 		bytearray[8]=current.brush_size;
 		bytearray[9]=current.type;
@@ -149,7 +151,9 @@ public class NetworkPaint extends ApplicationAdapter {
 	public void render () {
 
 		current=inputProcesor.pollFifo();  //Metoda zdejmuje ostatni element z listy fifo. Jesli elementow nie ma zwraca null
-		
+		if(ClientServerSelect=="S") sendData();
+		if(ClientServerSelect=="C") receiveData();
+		//receiveData();
 		//Czyszczenie ekranu
 		Gdx.gl.glClearColor(1f, 1f, 1f, 1f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
