@@ -10,8 +10,8 @@ public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.resizable = false;
-		//config.height = 800;
-		//config.width = 1280;
+		config.height = 600;
+		config.width = 800;
 		NetworkPaint paint=new NetworkPaint();
 		
 		System.out.println("Are you a server or client?  S/C: ");

@@ -12,7 +12,7 @@ public class MyInputProcesor implements InputProcessor {
 
     private Queue<Point> fifo = new LinkedList<Point>();
    
-    private Point point = new Point(0,0,(byte)0,(byte)5,(byte)0,(byte)0,(byte)0);
+    private Point point = new Point(0,0,(byte)5,(byte)0,(byte)0,(byte)0,(byte)0);
     
     public Point pollFifo () {
     	return fifo.poll();

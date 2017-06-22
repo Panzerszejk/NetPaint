@@ -73,13 +73,7 @@ public class NetworkPaint extends ApplicationAdapter {
 		
 		inputProcesor = new MyInputProcesor();	//utworzenie procesora obslugi wejsc
 		Gdx.input.setInputProcessor(inputProcesor);	//ustawienie procesora wejsc na ten z MyInputProcessor
-		set_kursor((byte)5); //wywolanie funkcji obslugujacej zmiane kursora
-		
-		
-		
-		
-		
-
+		set_kursor(inputProcesor.get_brush_size()); //wywolanie funkcji obslugujacej zmiane kursora
 		
 		texture=ScreenUtils.getFrameBufferTexture(); //sciagam teksture na wstepie zeby nie wywalilo nam NullPointerException przy pierwszym rysowaniu
 		
