@@ -18,7 +18,9 @@ public class MyInputProcesor implements InputProcessor {
     public Point pollFifo () {
     	return fifo.poll();
     }
-    
+    public void addFifo(Point object){
+    	fifo.add(object);
+    }
     public void set_brush_size(byte rozmiar)
     {
     this.brush_size = rozmiar;

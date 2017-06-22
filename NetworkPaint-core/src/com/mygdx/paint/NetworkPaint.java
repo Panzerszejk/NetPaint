@@ -1,5 +1,7 @@
 package com.mygdx.paint;
 
+import java.nio.ByteBuffer;
+
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -20,13 +22,14 @@ public class NetworkPaint extends ApplicationAdapter {
 	public int width;
 	public int height;
 	byte brushSize;
-	private MyInputProcesor inputProcesor;
+	public MyInputProcesor inputProcesor;
 	private SpriteBatch batch;
 	private TextureRegion texture;
 	private Sprite sprite;
 	public String ClientServerSelect;
 	public String ServerClientIP;
-	
+	ClientThread client=new ClientThread();
+	ServerThread server=new ServerThread();  
 	Point current;  //tablica pozycji obecnej
 	Point previous;	//tablica pozycji poprzedniej
 	
@@ -44,6 +47,62 @@ public class NetworkPaint extends ApplicationAdapter {
 		pm.drawCircle(rozmiar/2, rozmiar/2, rozmiar/2);
 		Gdx.graphics.setCursor(Gdx.graphics.newCursor(pm, rozmiar/2, rozmiar/2));
 		pm.dispose();
+	}
+	
+	public void sendData(){
+		if(current!=null){
+		byte[] bytearray= new byte[13];
+		byte[] bytesX = ByteBuffer.allocate(4).putInt(current.x).array();
+		byte[] bytesY = ByteBuffer.allocate(4).putInt(current.y).array();
+		for(int i=0;i<4;i++){		//X to bytes
+			bytearray[i]=bytesX[i];
+		}
+		for(int i=4;i<8;i++){		//Y to bytes
+			bytearray[i]=bytesY[i];
+		}
+		bytearray[8]=current.brush_size;
+		bytearray[9]=current.type;
+		bytearray[10]=current.r;
+		bytearray[11]=current.g;
+		bytearray[12]=current.b;
+		if(ClientServerSelect=="C"){
+			System.arraycopy( bytearray, 0, server.sendMsg, 0, bytearray.length );
+		}
+		if(ClientServerSelect=="S"){
+			System.arraycopy( bytearray, 0, client.sendMsg, 0, bytearray.length );
+		}
+		}
+	}
+	
+	public void receiveData(){
+		byte[] byteX=new byte[4];
+		byte[] byteY=new byte[4];
+		if(ClientServerSelect=="C"&&server.receiveMsg!=null){
+			System.arraycopy(server.receiveMsg, 0, byteX, 0, 4);
+			System.arraycopy(server.receiveMsg, 4, byteY, 4, 4);
+			int x=ByteBuffer.wrap(byteX).getInt();
+			int y=ByteBuffer.wrap(byteY).getInt();
+			byte s=server.receiveMsg[8];
+			byte t=server.receiveMsg[9];
+			byte r=server.receiveMsg[10];
+			byte g=server.receiveMsg[11];
+			byte b=server.receiveMsg[12];
+			Point punkt=new Point(x, y, s, t, r, g, b);
+			inputProcesor.addFifo(punkt);
+		}
+		if(ClientServerSelect=="S"&&client.receiveMsg!=null){
+			System.arraycopy(client.receiveMsg, 0, byteX, 0, 4);
+			System.arraycopy(client.receiveMsg, 4, byteY, 4, 4);
+			int x=ByteBuffer.wrap(byteX).getInt();
+			int y=ByteBuffer.wrap(byteY).getInt();
+			byte s=client.receiveMsg[8];
+			byte t=client.receiveMsg[9];
+			byte r=client.receiveMsg[10];
+			byte g=client.receiveMsg[11];
+			byte b=client.receiveMsg[12];
+			Point punkt=new Point(x, y, s, t, r, g, b);
+			inputProcesor.addFifo(punkt);
+		}
 	}
 	
 	@Override
@@ -80,12 +139,10 @@ public class NetworkPaint extends ApplicationAdapter {
 		texture=ScreenUtils.getFrameBufferTexture(); //sciagam teksture na wstepie zeby nie wywalilo nam NullPointerException przy pierwszym rysowaniu
 		
 		if(ClientServerSelect=="C"){  //wybor klient/serwer
-			ClientThread client=new ClientThread();
 			client.IPv4=ServerClientIP;
 			client.start();
 		}
 		else if(ClientServerSelect=="S"){
-			ServerThread server=new ServerThread();  
 			server.IPv4=ServerClientIP;
 			server.start();
 		}
@@ -95,7 +152,6 @@ public class NetworkPaint extends ApplicationAdapter {
 	public void render () {
 
 		current=inputProcesor.pollFifo();  //Metoda zdejmuje ostatni element z listy fifo. Jesli elementow nie ma zwraca null
-
 		
 		//Czyszczenie ekranu
 		Gdx.gl.glClearColor(1f, 1f, 1f, 1f);

@@ -13,8 +13,8 @@ public class ServerThread extends Thread{
     SocketHints socketHints = new SocketHints();
     ServerSocket server;
     Socket socket;
-    public byte[] receiveMsg = new byte[1024];
-    public byte[] sendMsg = new byte[1024];
+    public byte[] receiveMsg = new byte[13];
+    public byte[] sendMsg = new byte[13];
     public String IPv4 = new String();
     public void run()
     {

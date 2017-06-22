@@ -8,8 +8,8 @@ import com.badlogic.gdx.net.SocketHints;
 
 public class ClientThread extends Thread{
     Socket socket;
-    public byte[] receiveMsg = new byte[1024];
-    public byte[] sendMsg = new byte[1024];
+    public byte[] receiveMsg = new byte[13];
+    public byte[] sendMsg = new byte[13];
     public String IPv4 = new String();
     public void run(){
         SocketHints hints = new SocketHints();
