@@ -17,13 +17,16 @@ import com.badlogic.gdx.utils.ScreenUtils;
 public class NetworkPaint extends ApplicationAdapter {
 	public OrthographicCamera camera;
 	ShapeRenderer shapeRenderer; 
+	
 	public int width;
 	public int height;
 	byte brushSize;
+	
 	private MyInputProcesor inputProcesor;
 	private SpriteBatch batch;
 	private TextureRegion texture;
 	private Sprite sprite;
+	
 	public String ClientServerSelect;
 	public String ServerClientIP;
 	
@@ -71,8 +74,7 @@ public class NetworkPaint extends ApplicationAdapter {
 		set_kursor(brushSize); //wywolanie funkcji obslugujacej zmiane kursora
 		
 		inputProcesor = new MyInputProcesor();	//utworzenie procesora obslugi wejsc
-		inputProcesor.set_brush_size(brushSize);
-		inputProcesor.set_kolor((byte)255, (byte)255, (byte)255);
+		
 		Gdx.input.setInputProcessor(inputProcesor);	//ustawienie procesora wejsc na ten z MyInputProcessor
 		
 
@@ -120,8 +122,8 @@ public class NetworkPaint extends ApplicationAdapter {
 					y1 = height - previous.y;
 					y2 = height - current.y;
 					shapeRenderer.begin(ShapeType.Filled);
-					shapeRenderer.setColor(0.5f, 0.75f, 0.75f, 1f);
-					//System.out.println("("+x1+" "+y1+") , ("+x2+" "+y2+")");
+					shapeRenderer.setColor((int)current.r/255f, (int)current.g/255f, (int)current.b/255f, 1f);
+					
 					shapeRenderer.circle(x1,y1,brushSize/2);
 					shapeRenderer.rectLine(x1,y1,x2,y2,brushSize); //Rysujemy "zaokralona" linie
 					shapeRenderer.circle(x2,y2,brushSize/2);
@@ -130,7 +132,7 @@ public class NetworkPaint extends ApplicationAdapter {
 				if(previous.type == 1){ //Jesli przycisk myszy klikniety
 					camera.update();
 					shapeRenderer.begin(ShapeType.Filled);
-					shapeRenderer.setColor(0.5f, 0.75f, 0.75f, 1f);
+					shapeRenderer.setColor(current.r/255f, current.g/255f, current.b/255f, 1f);
 					shapeRenderer.circle(current.x,height-current.y,brushSize/2); //Rysuj pojedynczy punkt
 					shapeRenderer.end();
 				}
