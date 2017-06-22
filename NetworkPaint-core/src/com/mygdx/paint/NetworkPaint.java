@@ -122,7 +122,7 @@ public class NetworkPaint extends ApplicationAdapter {
 					y1 = height - previous.y;
 					y2 = height - current.y;
 					shapeRenderer.begin(ShapeType.Filled);
-					shapeRenderer.setColor((int)current.r/255f, (int)current.g/255f, (int)current.b/255f, 1f);
+					shapeRenderer.setColor((current.r & 0xff)/255f, (current.g & 0xff)/255f, (current.b & 0xff)/255f, 1f);
 					
 					shapeRenderer.circle(x1,y1,brushSize/2);
 					shapeRenderer.rectLine(x1,y1,x2,y2,brushSize); //Rysujemy "zaokralona" linie
@@ -132,7 +132,7 @@ public class NetworkPaint extends ApplicationAdapter {
 				if(previous.type == 1){ //Jesli przycisk myszy klikniety
 					camera.update();
 					shapeRenderer.begin(ShapeType.Filled);
-					shapeRenderer.setColor(current.r/255f, current.g/255f, current.b/255f, 1f);
+					shapeRenderer.setColor((current.r & 0xff)/255f, (current.g & 0xff)/255f, (current.b & 0xff)/255f, 1f);
 					shapeRenderer.circle(current.x,height-current.y,brushSize/2); //Rysuj pojedynczy punkt
 					shapeRenderer.end();
 				}
