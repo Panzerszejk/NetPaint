@@ -51,7 +51,7 @@ public class NetworkPaint extends ApplicationAdapter {
 		pm.dispose();
 	}
 	
-	public void sendData(){
+	public void sendData(Point current){
 		if(current!=null){
 		byte[] bytearray= new byte[13];
 		byte[] bytesX = ByteBuffer.allocate(4).putInt(current.x).array();
@@ -75,6 +75,7 @@ public class NetworkPaint extends ApplicationAdapter {
 		if(ClientServerSelect.equals("S")){
 			System.arraycopy( bytearray, 0, client.sendMsg, 0, bytearray.length );
 		}
+		System.out.println(bytearray[0]+bytearray[1]);
 		}
 	}
 	
@@ -83,7 +84,7 @@ public class NetworkPaint extends ApplicationAdapter {
 		byte[] byteY=new byte[4];
 		if(ClientServerSelect.equals("C")&&server.receiveMsg!=null){
 			System.arraycopy(server.receiveMsg, 0, byteX, 0, 4);
-			System.arraycopy(server.receiveMsg, 4, byteY, 4, 4);
+			System.arraycopy(server.receiveMsg, 4, byteY, 0, 4);
 			int x=ByteBuffer.wrap(byteX).getInt();
 			int y=ByteBuffer.wrap(byteY).getInt();
 			byte s=server.receiveMsg[8];
@@ -96,7 +97,7 @@ public class NetworkPaint extends ApplicationAdapter {
 		}
 		if(ClientServerSelect.equals("S")&&client.receiveMsg!=null){
 			System.arraycopy(client.receiveMsg, 0, byteX, 0, 4);
-			System.arraycopy(client.receiveMsg, 4, byteY, 4, 4);
+			System.arraycopy(client.receiveMsg, 4, byteY, 0, 4);
 			int x=ByteBuffer.wrap(byteX).getInt();
 			int y=ByteBuffer.wrap(byteY).getInt();
 			byte s=client.receiveMsg[8];
@@ -136,7 +137,6 @@ public class NetworkPaint extends ApplicationAdapter {
 		set_kursor(inputProcesor.get_brush_size()); //wywolanie funkcji obslugujacej zmiane kursora
 		
 		texture=ScreenUtils.getFrameBufferTexture(); //sciagam teksture na wstepie zeby nie wywalilo nam NullPointerException przy pierwszym rysowaniu
-		System.out.println("test");
 		if(ClientServerSelect.equals("C")){  //wybor klient/serwer
 			client.IPv4=ServerClientIP;
 			client.start();
@@ -144,7 +144,6 @@ public class NetworkPaint extends ApplicationAdapter {
 		else if(ClientServerSelect.equals("S")){
 			server.IPv4=ServerClientIP;
 			server.start();
-			System.out.println("niby startuje");
 		}
 	}
 
@@ -152,7 +151,7 @@ public class NetworkPaint extends ApplicationAdapter {
 	public void render () {
 
 		current=inputProcesor.pollFifo();  //Metoda zdejmuje ostatni element z listy fifo. Jesli elementow nie ma zwraca null
-		if(ClientServerSelect.equals("S")) sendData();
+		if(ClientServerSelect.equals("S")) sendData(current);
 		if(ClientServerSelect.equals("C")) receiveData();
 		
 		//Czyszczenie ekranu

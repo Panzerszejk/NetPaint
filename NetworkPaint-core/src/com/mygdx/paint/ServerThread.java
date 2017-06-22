@@ -34,7 +34,7 @@ public class ServerThread extends Thread{
                 try {
                     socket.getInputStream().read(receiveMsg, 0, receiveMsg.length);
                     socket.getOutputStream().write(sendMsg);                                                                          //---
-
+            		System.out.println("test");
                 } catch (IOException e) {
                     e.printStackTrace();
                     server.dispose();
