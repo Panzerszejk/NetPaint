@@ -54,15 +54,21 @@ public class NetworkPaint extends ApplicationAdapter {
 	public void sendData(Point current){
 		if(current!=null){
 		byte[] bytearray= new byte[13];
-		byte[] bytesX = ByteBuffer.allocate(4).putInt(current.x).array();
-		byte[] bytesY = ByteBuffer.allocate(4).putInt(current.y).array();
+		byte[] bytesX = new byte[] { 
+		        (byte)(current.x >> 24),
+		        (byte)(current.x >> 16),
+		        (byte)(current.x >> 8),
+		        (byte)current.x };
+		byte[] bytesY = new byte[] { 
+		        (byte)(current.y >> 24),
+		        (byte)(current.y >> 16),
+		        (byte)(current.y >> 8),
+		        (byte)current.y };
 		for(int i=0;i<4;i++){		//X to bytes
 			bytearray[i]=bytesX[i];
 		}
 		for(int i=4;i<8;i++){		//Y to bytes
-			int j=0;
-			bytearray[i]=bytesY[j];
-			j++;
+			bytearray[i]=bytesY[i-4];
 		}
 		bytearray[8]=current.brush_size;
 		bytearray[9]=current.type;
@@ -75,6 +81,7 @@ public class NetworkPaint extends ApplicationAdapter {
 		if(ClientServerSelect.equals("S")){
 			System.arraycopy( bytearray, 0, server.sendMsg, 0, bytearray.length );
 		}
+		System.out.println(bytearray[4] << 24 | (bytearray[5] & 0xFF) << 16 | (bytearray[6] & 0xFF) << 8 | (bytearray[7] & 0xFF));
 		}
 	}
 	
@@ -84,8 +91,8 @@ public class NetworkPaint extends ApplicationAdapter {
 		if(ClientServerSelect.equals("C")&&client.receiveMsg!=null){
 			System.arraycopy(client.receiveMsg, 0, byteX, 0, 4);
 			System.arraycopy(client.receiveMsg, 4, byteY, 0, 4);
-			int x=ByteBuffer.wrap(byteX).getInt();
-			int y=ByteBuffer.wrap(byteY).getInt();
+			int x=(client.receiveMsg[0] << 24 | (client.receiveMsg[1] & 0xFF) << 16 | (client.receiveMsg[2] & 0xFF) << 8 | (client.receiveMsg[3] & 0xFF));
+			int y=(client.receiveMsg[4] << 24 | (client.receiveMsg[5] & 0xFF) << 16 | (client.receiveMsg[6] & 0xFF) << 8 | (client.receiveMsg[7] & 0xFF));
 			byte s=client.receiveMsg[8];
 			byte t=client.receiveMsg[9];
 			byte r=client.receiveMsg[10];
