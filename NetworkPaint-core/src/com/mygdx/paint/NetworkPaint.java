@@ -33,7 +33,7 @@ public class NetworkPaint extends ApplicationAdapter {
 	Point current;  //tablica pozycji obecnej
 	Point previous;	//tablica pozycji poprzedniej
 	
-	public void set_kursor(byte rozmiar)
+	public void set_kursor(byte rozmiar,byte r,byte g,byte b)
 	{
 		byte brushSizePow2=rozmiar;
 		brushSizePow2--;
@@ -42,9 +42,15 @@ public class NetworkPaint extends ApplicationAdapter {
 		brushSizePow2 |= brushSizePow2 >> 4; //zaokraglenie dziala do 4 bitow + 1. Jak bedziemy robic wieksza wielkosc pedzla niz 32 to trzeba bedzie dodac jeszcze jedna linijke
 		brushSizePow2++;
 
+		if(brushSizePow2<16) //rozmiar kursora w ³indo³sie musi byæ wiekszy od 16 
+			brushSizePow2=16;
+			
 		Pixmap pm = new Pixmap(brushSizePow2,brushSizePow2,Pixmap.Format.RGBA8888); //rozmiar kursora musi byc potega 2
+		pm.setColor((r & 0xff)/255f , (g & 0xff)/255f , (b & 0xff)/255f ,1f);
+		pm.fillCircle(rozmiar/2, rozmiar/2,rozmiar/2);
 		pm.setColor(Color.BLACK);
 		pm.drawCircle(rozmiar/2, rozmiar/2, rozmiar/2);
+		
 		Gdx.graphics.setCursor(Gdx.graphics.newCursor(pm, rozmiar/2, rozmiar/2));
 		pm.dispose();
 	}
@@ -73,7 +79,7 @@ public class NetworkPaint extends ApplicationAdapter {
 		
 		inputProcesor = new MyInputProcesor();	//utworzenie procesora obslugi wejsc
 		Gdx.input.setInputProcessor(inputProcesor);	//ustawienie procesora wejsc na ten z MyInputProcessor
-		set_kursor(inputProcesor.get_brush_size()); //wywolanie funkcji obslugujacej zmiane kursora
+		set_kursor(inputProcesor.get_brush_size(),inputProcesor.get_r(),inputProcesor.get_g(),inputProcesor.get_b()); //wywolanie funkcji obslugujacej zmiane kursora
 		
 		texture=ScreenUtils.getFrameBufferTexture(); //sciagam teksture na wstepie zeby nie wywalilo nam NullPointerException przy pierwszym rysowaniu
 		
@@ -107,8 +113,9 @@ public class NetworkPaint extends ApplicationAdapter {
 		//batch.setColor(190/255f, 190/255f, 190/255f, 0f);
 		sprite.draw(batch);
 		batch.end();
-
+		
 		if(current != null){ //Musimy sprawdzic czy przypadkiem PosTab nie jest pusty(null) bo inaczej wywali nam NullPointerException
+			set_kursor(current.brush_size,current.r,current.g,current.b);
 			if(previous != null){ //Sprawdzenie, czy nie jest to pierwszy punkt
 				if(current.type == 2){ //Jesli mysz jest przeciagana
 					camera.update();
