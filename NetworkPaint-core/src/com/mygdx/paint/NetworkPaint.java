@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 public class NetworkPaint extends ApplicationAdapter {
 	public OrthographicCamera camera;
 	ShapeRenderer shapeRenderer; 
+	
 	public int width;
 	public int height;
 	byte brushSize;
@@ -26,6 +27,7 @@ public class NetworkPaint extends ApplicationAdapter {
 	private SpriteBatch batch;
 	private TextureRegion texture;
 	private Sprite sprite;
+	
 	public String ClientServerSelect;
 	public String ServerClientIP;
 	ClientThread client=new ClientThread();
@@ -117,8 +119,8 @@ public class NetworkPaint extends ApplicationAdapter {
 		shapeRenderer = new ShapeRenderer();
 
 		Gdx.graphics.setContinuousRendering(false); //wylacza ciagle renderowanie. Renderuje gdy pojawi sie jakis event
-		//zmienic na true!!!
-		brushSize = 20;
+		//zmienic na true, przy last wersji!!!
+		
 
 		shapeRenderer.setProjectionMatrix(camera.combined);
 		batch = new SpriteBatch();
@@ -126,15 +128,10 @@ public class NetworkPaint extends ApplicationAdapter {
 		current = null;
 		previous = null;
 		//obliczanie najblizszej wiekszej potegi 2. Kod ze stacka :D
-	
-		set_kursor(brushSize); //wywolanie funkcji obslugujacej zmiane kursora
 		
 		inputProcesor = new MyInputProcesor();	//utworzenie procesora obslugi wejsc
-		inputProcesor.set_brush_size(brushSize);
-		inputProcesor.set_kolor((byte)255, (byte)255, (byte)255);
 		Gdx.input.setInputProcessor(inputProcesor);	//ustawienie procesora wejsc na ten z MyInputProcessor
-		
-
+		set_kursor(inputProcesor.get_brush_size()); //wywolanie funkcji obslugujacej zmiane kursora
 		
 		texture=ScreenUtils.getFrameBufferTexture(); //sciagam teksture na wstepie zeby nie wywalilo nam NullPointerException przy pierwszym rysowaniu
 		
@@ -176,18 +173,18 @@ public class NetworkPaint extends ApplicationAdapter {
 					y1 = height - previous.y;
 					y2 = height - current.y;
 					shapeRenderer.begin(ShapeType.Filled);
-					shapeRenderer.setColor(0.5f, 0.75f, 0.75f, 1f);
-					//System.out.println("("+x1+" "+y1+") , ("+x2+" "+y2+")");
-					shapeRenderer.circle(x1,y1,brushSize/2);
-					shapeRenderer.rectLine(x1,y1,x2,y2,brushSize); //Rysujemy "zaokralona" linie
-					shapeRenderer.circle(x2,y2,brushSize/2);
+					shapeRenderer.setColor((current.r & 0xff)/255f, (current.g & 0xff)/255f, (current.b & 0xff)/255f, 1f);
+					
+					shapeRenderer.circle(x1,y1,current.brush_size/2);
+					shapeRenderer.rectLine(x1,y1,x2,y2,current.brush_size); //Rysujemy "zaokralona" linie
+					shapeRenderer.circle(x2,y2,current.brush_size/2);
 					shapeRenderer.end();
 				}
 				if(previous.type == 1){ //Jesli przycisk myszy klikniety
 					camera.update();
 					shapeRenderer.begin(ShapeType.Filled);
-					shapeRenderer.setColor(0.5f, 0.75f, 0.75f, 1f);
-					shapeRenderer.circle(current.x,height-current.y,brushSize/2); //Rysuj pojedynczy punkt
+					shapeRenderer.setColor((current.r & 0xff)/255f, (current.g & 0xff)/255f, (current.b & 0xff)/255f, 1f);
+					shapeRenderer.circle(current.x,height-current.y,current.brush_size/2); //Rysuj pojedynczy punkt
 					shapeRenderer.end();
 				}
 			}
