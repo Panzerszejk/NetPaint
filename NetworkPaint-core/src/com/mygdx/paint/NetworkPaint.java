@@ -82,19 +82,6 @@ public class NetworkPaint extends ApplicationAdapter {
 		byte[] byteX=new byte[4];
 		byte[] byteY=new byte[4];
 		if(ClientServerSelect.equals("C")&&client.receiveMsg!=null){
-			System.arraycopy(server.receiveMsg, 0, byteX, 0, 4);
-			System.arraycopy(server.receiveMsg, 4, byteY, 0, 4);
-			int x=ByteBuffer.wrap(byteX).getInt();
-			int y=ByteBuffer.wrap(byteY).getInt();
-			byte s=server.receiveMsg[8];
-			byte t=server.receiveMsg[9];
-			byte r=server.receiveMsg[10];
-			byte g=server.receiveMsg[11];
-			byte b=server.receiveMsg[12];
-			Point punkt=new Point(x, y, s, t, r, g, b);
-			inputProcesor.addFifo(punkt);
-		}
-		if(ClientServerSelect.equals("S")&&server.receiveMsg!=null){
 			System.arraycopy(client.receiveMsg, 0, byteX, 0, 4);
 			System.arraycopy(client.receiveMsg, 4, byteY, 0, 4);
 			int x=ByteBuffer.wrap(byteX).getInt();
@@ -104,6 +91,19 @@ public class NetworkPaint extends ApplicationAdapter {
 			byte r=client.receiveMsg[10];
 			byte g=client.receiveMsg[11];
 			byte b=client.receiveMsg[12];
+			Point punkt=new Point(x, y, s, t, r, g, b);
+			inputProcesor.addFifo(punkt);
+		}
+		if(ClientServerSelect.equals("S")&&server.receiveMsg!=null){
+			System.arraycopy(server.receiveMsg, 0, byteX, 0, 4);
+			System.arraycopy(server.receiveMsg, 4, byteY, 0, 4);
+			int x=ByteBuffer.wrap(byteX).getInt();
+			int y=ByteBuffer.wrap(byteY).getInt();
+			byte s=server.receiveMsg[8];
+			byte t=server.receiveMsg[9];
+			byte r=server.receiveMsg[10];
+			byte g=server.receiveMsg[11];
+			byte b=server.receiveMsg[12];
 			Point punkt=new Point(x, y, s, t, r, g, b);
 			inputProcesor.addFifo(punkt);
 		}
