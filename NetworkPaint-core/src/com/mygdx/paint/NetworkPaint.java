@@ -69,10 +69,10 @@ public class NetworkPaint extends ApplicationAdapter {
 		bytearray[10]=current.r;
 		bytearray[11]=current.g;
 		bytearray[12]=current.b;
-		if(ClientServerSelect=="C"){
+		if(ClientServerSelect.equals("C")){
 			System.arraycopy( bytearray, 0, server.sendMsg, 0, bytearray.length );
 		}
-		if(ClientServerSelect=="S"){
+		if(ClientServerSelect.equals("S")){
 			System.arraycopy( bytearray, 0, client.sendMsg, 0, bytearray.length );
 		}
 		}
@@ -81,7 +81,7 @@ public class NetworkPaint extends ApplicationAdapter {
 	public void receiveData(){
 		byte[] byteX=new byte[4];
 		byte[] byteY=new byte[4];
-		if(ClientServerSelect=="C"&&server.receiveMsg!=null){
+		if(ClientServerSelect.equals("C")&&server.receiveMsg!=null){
 			System.arraycopy(server.receiveMsg, 0, byteX, 0, 4);
 			System.arraycopy(server.receiveMsg, 4, byteY, 4, 4);
 			int x=ByteBuffer.wrap(byteX).getInt();
@@ -94,7 +94,7 @@ public class NetworkPaint extends ApplicationAdapter {
 			Point punkt=new Point(x, y, s, t, r, g, b);
 			inputProcesor.addFifo(punkt);
 		}
-		if(ClientServerSelect=="S"&&client.receiveMsg!=null){
+		if(ClientServerSelect.equals("S")&&client.receiveMsg!=null){
 			System.arraycopy(client.receiveMsg, 0, byteX, 0, 4);
 			System.arraycopy(client.receiveMsg, 4, byteY, 4, 4);
 			int x=ByteBuffer.wrap(byteX).getInt();
@@ -112,7 +112,7 @@ public class NetworkPaint extends ApplicationAdapter {
 	@Override
 	public void create () {
 		
-		
+
 		width = Gdx.graphics.getWidth();
 		height = Gdx.graphics.getHeight();
 		camera = new OrthographicCamera();
@@ -120,7 +120,7 @@ public class NetworkPaint extends ApplicationAdapter {
 		camera.update();
 		shapeRenderer = new ShapeRenderer();
 
-		Gdx.graphics.setContinuousRendering(false); //wylacza ciagle renderowanie. Renderuje gdy pojawi sie jakis event
+		Gdx.graphics.setContinuousRendering(true); //wylacza ciagle renderowanie. Renderuje gdy pojawi sie jakis event
 		//zmienic na true, przy last wersji!!!
 		
 
@@ -136,14 +136,15 @@ public class NetworkPaint extends ApplicationAdapter {
 		set_kursor(inputProcesor.get_brush_size()); //wywolanie funkcji obslugujacej zmiane kursora
 		
 		texture=ScreenUtils.getFrameBufferTexture(); //sciagam teksture na wstepie zeby nie wywalilo nam NullPointerException przy pierwszym rysowaniu
-		
-		if(ClientServerSelect=="C"){  //wybor klient/serwer
+		System.out.println("test");
+		if(ClientServerSelect.equals("C")){  //wybor klient/serwer
 			client.IPv4=ServerClientIP;
 			client.start();
 		}
-		else if(ClientServerSelect=="S"){
+		else if(ClientServerSelect.equals("S")){
 			server.IPv4=ServerClientIP;
 			server.start();
+			System.out.println("niby startuje");
 		}
 	}
 
@@ -151,13 +152,12 @@ public class NetworkPaint extends ApplicationAdapter {
 	public void render () {
 
 		current=inputProcesor.pollFifo();  //Metoda zdejmuje ostatni element z listy fifo. Jesli elementow nie ma zwraca null
-		if(ClientServerSelect=="S") sendData();
-		if(ClientServerSelect=="C") receiveData();
-		//receiveData();
+		if(ClientServerSelect.equals("S")) sendData();
+		if(ClientServerSelect.equals("C")) receiveData();
+		
 		//Czyszczenie ekranu
 		Gdx.gl.glClearColor(1f, 1f, 1f, 1f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-
 
 		//Rysujemy w kazdej iteracji to co mamy w teksturze
 		sprite = new Sprite(texture);

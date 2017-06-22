@@ -19,7 +19,7 @@ public class ServerThread extends Thread{
     public void run()
     {
     	try{
-    		hints.acceptTimeout=60000;
+    		hints.acceptTimeout=10000;
     		socketHints = new SocketHints();
     		server = Gdx.net.newServerSocket(Protocol.TCP, IPv4 , 8783, hints);   
     		socket  = server.accept(socketHints);
