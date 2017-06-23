@@ -28,8 +28,8 @@ public class NetworkPaint extends ApplicationAdapter {
 	
 	public String ClientServerSelect;
 	public String ServerClientIP;
-	ClientThread client=new ClientThread();
-	ServerThread server=new ServerThread(); 
+	ClientThread client=ClientThread.get();
+	ServerThread server=ServerThread.get(); 
 	Point temp;
 	Point current0;  //tablica pozycji obecnej
 	Point previous0;	//tablica pozycji poprzedniej
@@ -166,6 +166,12 @@ public class NetworkPaint extends ApplicationAdapter {
 					shapeRenderer.circle(current0.x,height-current0.y,current0.brush_size/2); //Rysuj pojedynczy punkt
 					shapeRenderer.end();
 				}
+				if(current0.type==5){
+					Shape bob = new Point(current0.x, current0.y, current0.brush_size, current0.type, current0.r, current0.g, current0.b,current0.id);
+					bob.draw(shapeRenderer,previous0.x,height-previous0.y,height);
+					Shape bob1 = new Rect(current0.x, current0.y, current0.brush_size, current0.type, current0.r, current0.g, current0.b,current0.id);
+					bob1.draw(shapeRenderer, 20, 20, height);
+				}
 			}
 			else{
 				previous0 = new Point(current0); //Jesli LastTab jest null, to stworz nowy
@@ -173,12 +179,7 @@ public class NetworkPaint extends ApplicationAdapter {
 		
 			}
 			previous0.copy(current0);  //Przepisuje punkt za kazdym razem, zeby uniknac problemow z nullem
-			if(current0.type==5){
-				Shape bob = new Point(current0.x, current0.y, current0.brush_size, current0.type, current0.r, current0.g, current0.b,current0.id);
-				bob.draw(shapeRenderer,200,height-200,height);
-				Shape bob1 = new Rect(current0.x, current0.y, current0.brush_size, current0.type, current0.r, current0.g, current0.b,current0.id);
-				bob1.draw(shapeRenderer, 20, 20, height);
-			}
+			
 		}
 		
 		if(current1 != null){ //Musimy sprawdzic czy przypadkiem PosTab nie jest pusty(null) bo inaczej wywali nam NullPointerException

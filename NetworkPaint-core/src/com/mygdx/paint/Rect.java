@@ -56,7 +56,7 @@ public class Rect implements Shape {
 	{
 		shapeRenderer.begin(ShapeType.Filled);
 		shapeRenderer.setColor((r & 0xff)/255f, (g & 0xff)/255f, (b & 0xff)/255f, 1f);
-		shapeRenderer.rect(x, height-y, x1, y1);
+		shapeRenderer.rect(x-x1/2, (height-y)-y1/2, x1, y1);
 		shapeRenderer.end();
 	}
 	
