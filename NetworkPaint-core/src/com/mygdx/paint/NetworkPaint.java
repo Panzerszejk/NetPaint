@@ -120,6 +120,10 @@ public class NetworkPaint extends ApplicationAdapter {
 			current0 = null;
 			break;
 		}
+		default:{
+			current0 = null;
+			current1 = null;
+		}
 		}
 		}
 		if(ClientServerSelect.equals("S")) {
