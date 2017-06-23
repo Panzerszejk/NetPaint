@@ -46,7 +46,7 @@ public class ClientThread extends Thread{
         hints.tcpNoDelay = false;
         hints.trafficClass = 0x22;
         try {
-           socket = Gdx.net.newClientSocket(Protocol.TCP, IPv4 , 71830, hints );
+           socket = Gdx.net.newClientSocket(Protocol.TCP, IPv4 , 11830, hints );
            Thread.sleep(2000, 0);
            } catch (Exception e) {
          	   e.printStackTrace();

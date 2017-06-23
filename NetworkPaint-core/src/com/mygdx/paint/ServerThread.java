@@ -49,7 +49,7 @@ public class ServerThread extends Thread{
     		hints.acceptTimeout=10000;
             socketHints.tcpNoDelay = false;
             socketHints.trafficClass = 0x22;
-    		server = Gdx.net.newServerSocket(Protocol.TCP, IPv4 , 71830, hints);   
+    		server = Gdx.net.newServerSocket(Protocol.TCP, IPv4 , 11830, hints);   
     		socket  = server.accept(socketHints);
     		Thread.sleep(2000);
         } catch (Exception e) {
