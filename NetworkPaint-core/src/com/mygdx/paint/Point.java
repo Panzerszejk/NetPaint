@@ -1,9 +1,6 @@
 package com.mygdx.paint;
 
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-
-public class Point implements Shape {
+public class Point {
 	
 	//parametry oraz rodzaj ruchu kursora(rysowania)
 	int x;
@@ -43,23 +40,12 @@ public class Point implements Shape {
 	}
 	
 	public boolean equal(Point point){
-		if(this.type==point.type&&this.x==point.x&&this.y==point.y&&this.brush_size==point.brush_size&&this.r==point.r&&this.id==point.id){
+		if(this.type==point.type&&this.x==point.x&&this.y==point.y&&this.brush_size==point.brush_size&&this.r==point.r){
 			return true;
 		}
 		else {
 			return false;
 		}
-	}
-	
-	public void draw(ShapeRenderer shapeRenderer,int x1,int y1,int height)
-	{
-		shapeRenderer.begin(ShapeType.Filled);
-		shapeRenderer.setColor((r & 0xff)/255f, (g & 0xff)/255f, (b & 0xff)/255f, 1f);
-		
-		shapeRenderer.circle(x1,y1,brush_size/2);
-		shapeRenderer.rectLine(x1,y1,x,height-y,brush_size); //Rysujemy "zaokralona" linie
-		shapeRenderer.circle(x,height-y,brush_size/2);
-		shapeRenderer.end();
 	}
 	
 	public Point(Point point)
@@ -74,3 +60,4 @@ public class Point implements Shape {
 		this.id=point.id;
 	}
 }
+
