@@ -20,12 +20,18 @@ public class DesktopLauncher {
 		
 		System.out.println("Enter your IPv4: ");
 		String ServerIP=scanner.nextLine();
+		System.out.println("Enter your port: ");
+		int ServerPort=Integer.parseInt(scanner.nextLine());
 		System.out.println("Enter foreign IPv4: ");
 		String ClientIP=scanner.nextLine();
+		System.out.println("Enter foreign port: ");
+		int ClientPort=Integer.parseInt(scanner.nextLine());
 		scanner.close();
 		paint.ClientServerSelect=ClientServerSelect;
 		paint.ServerIP=ServerIP;
 		paint.ClientIP=ClientIP;
+		paint.ClientPort=ClientPort;
+		paint.ServerPort=ServerPort;
 		new LwjglApplication(paint, config);
 	}
 }

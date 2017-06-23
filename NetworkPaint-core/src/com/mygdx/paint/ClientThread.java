@@ -11,6 +11,7 @@ import com.badlogic.gdx.net.SocketHints;
 
 public class ClientThread extends Thread{
     Socket socket;
+    public int port;
     public byte[] receiveMsg = new byte[13];
     public byte[] sendMsg = new byte[13];
     public String IPv4 = new String();
@@ -46,8 +47,8 @@ public class ClientThread extends Thread{
         hints.tcpNoDelay = false;
         hints.trafficClass = 0x14;
         try {
-           socket = Gdx.net.newClientSocket(Protocol.TCP, IPv4 , 11564, hints );
-           Thread.sleep(500, 0);
+           socket = Gdx.net.newClientSocket(Protocol.TCP, IPv4 , port, hints );
+           Thread.sleep(2000, 0);
            } catch (Exception e) {
          	   e.printStackTrace();
            }

@@ -152,11 +152,17 @@ public class MyInputProcesor implements InputProcessor {
     	if(character == '+' || character == '=') {
     		point.brush_size++;
     		point.type = (byte)3;
+    		if(point.brush_size>30){
+    			point.brush_size=30;
+    		}
     		fifo.add(point);
     	}
     	else if (character == '-') {
     		point.brush_size--;
     		point.type = (byte)3;
+    		if(point.brush_size<1){
+    			point.brush_size=1;
+    		}
     		fifo.add(point);
     	}
     	

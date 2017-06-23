@@ -29,6 +29,8 @@ public class NetworkPaint extends ApplicationAdapter {
 	public String ClientServerSelect;
 	public String ClientIP;
 	public String ServerIP;
+	public int ClientPort;
+	public int ServerPort;
 	ClientThread client=new ClientThread();
 	ServerThread server=new ServerThread(); 
 	Point temp;
@@ -60,14 +62,8 @@ public class NetworkPaint extends ApplicationAdapter {
 		pm.dispose();
 	}
 	
-	
-	
-	
-	
 	@Override
 	public void create () {
-		
-
 		width = Gdx.graphics.getWidth();
 		height = Gdx.graphics.getHeight();
 		camera = new OrthographicCamera();
@@ -97,9 +93,12 @@ public class NetworkPaint extends ApplicationAdapter {
 		texture=ScreenUtils.getFrameBufferTexture(); //sciagam teksture na wstepie zeby nie wywalilo nam NullPointerException przy pierwszym rysowaniu
 		if(ClientServerSelect.equals("online")){  //wybor klient/serwer
 			client.IPv4=ClientIP;
+			client.port=ClientPort;
 			client.start();
 			server.IPv4=ServerIP;
+			server.port=ServerPort;
 			server.start();
+
 		}
 	}
 
