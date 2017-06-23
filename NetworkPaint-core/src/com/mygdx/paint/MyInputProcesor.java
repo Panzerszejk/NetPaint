@@ -12,7 +12,7 @@ public class MyInputProcesor implements InputProcessor {
 
     private Queue<Point> fifo = new LinkedList<Point>();
    
-    private Point point = new Point(0,0,(byte)8,(byte)0,(byte)0,(byte)0,(byte)0);
+    private Point point = new Point(0,0,(byte)8,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0);
     
     public Point pollFifo () {
     	return fifo.poll();
@@ -175,10 +175,7 @@ public class MyInputProcesor implements InputProcessor {
 
 	@Override
 	public boolean mouseMoved(int x, int y) {	
-		point.x = x;
-		point.y = y;
-		point.type = (byte)3;
-		fifo.add(point); 
+
 		return false;
 	}
 }

@@ -32,8 +32,8 @@ public class NetworkPaint extends ApplicationAdapter {
 	ServerThread server=new ServerThread();  
 	Point current;  //tablica pozycji obecnej
 	Point previous;	//tablica pozycji poprzedniej
-	Point received=new Point(0,0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0);
-	Point lastreceived=new Point(0,0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0);
+	Point received=new Point(0,0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0);
+	Point lastreceived=new Point(0,0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0);
 	public void set_kursor(byte rozmiar,byte r,byte g,byte b)
 	{
 		byte brushSizePow2=rozmiar;
@@ -129,7 +129,7 @@ public class NetworkPaint extends ApplicationAdapter {
 		if(current != null){ //Musimy sprawdzic czy przypadkiem PosTab nie jest pusty(null) bo inaczej wywali nam NullPointerException
 			set_kursor(current.brush_size,current.r,current.g,current.b);
 			if(previous != null){ //Sprawdzenie, czy nie jest to pierwszy punkt
-				if(current.type == 2){ //Jesli mysz jest przeciagana
+				if(current.type == 2&&previous.type!=0){ //Jesli mysz jest przeciagana
 					camera.update();
 					int x1, x2, y1, y2;
 					x1 = previous.x;
