@@ -78,7 +78,7 @@ public class ClientThread extends Thread{
                 try {
                 	//chwilowo klient tylko czyta, do odbioru/czytania potrzeba tokena
                     //socket.getOutputStream().write(sendMsg); // wiadomosc wysylana
-                    socket.getInputStream().read(receiveMsg, 0, receiveMsg.length); //odebrana od servera
+                    socket.getInputStream().read(receiveMsg, 0, 13); //odebrana od servera
                 	receiveData();
                 } catch (IOException e) {
                     e.printStackTrace();

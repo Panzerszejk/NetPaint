@@ -25,32 +25,29 @@ public class ServerThread extends Thread{
 	byte[] byteX=new byte[4];
 	byte[] byteY=new byte[4];
     private Queue<Point> fifoserver = new LinkedList<Point>();
-
+    public Point lastPoint;
 	
     public void sendData(Point current) throws IOException{
 		if(current!=null&&current.type!=0){
-		byte[] bytesX = new byte[] { 
-		        (byte)(current.x >> 24),
-		        (byte)(current.x >> 16),
-		        (byte)(current.x >> 8),
-		        (byte)current.x };
-		byte[] bytesY = new byte[] { 
-		        (byte)(current.y >> 24),
-		        (byte)(current.y >> 16),
-		        (byte)(current.y >> 8),
-		        (byte)current.y };
-		for(int i=0;i<4;i++){		//X to bytes
-			sendMsg[i]=bytesX[i];
-		}
-		for(int i=4;i<8;i++){		//Y to bytes
-			sendMsg[i]=bytesY[i-4];
-		}
-		sendMsg[8]=current.brush_size;
-		sendMsg[9]=current.type;
-		sendMsg[10]=current.r;
-		sendMsg[11]=current.g;
-		sendMsg[12]=current.b;
-        socket.getOutputStream().write(sendMsg);                                                                          //---
+			if(!current.equals(lastPoint)){
+				byte[] bytesX = new byte[] { (byte) (current.x >> 24), (byte) (current.x >> 16),
+						(byte) (current.x >> 8), (byte) current.x };
+				byte[] bytesY = new byte[] { (byte) (current.y >> 24), (byte) (current.y >> 16),
+						(byte) (current.y >> 8), (byte) current.y };
+				for (int i = 0; i < 4; i++) { // X to bytes
+					sendMsg[i] = bytesX[i];
+				}
+				for (int i = 4; i < 8; i++) { // Y to bytes
+					sendMsg[i] = bytesY[i - 4];
+				}
+				sendMsg[8] = current.brush_size;
+				sendMsg[9] = current.type;
+				sendMsg[10] = current.r;
+				sendMsg[11] = current.g;
+				sendMsg[12] = current.b;
+				lastPoint.copy(current);
+				socket.getOutputStream().write(sendMsg);
+			}//---
 		}
 	}
     
