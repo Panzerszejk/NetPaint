@@ -14,7 +14,6 @@ public class ServerThread extends Thread{
     SocketHints socketHints = new SocketHints();
     ServerSocket server;
     Socket socket;
-    public int port;
     public byte[] receiveMsg = new byte[13];
     public byte[] sendMsg = new byte[13];
     public String IPv4 = new String();
@@ -49,8 +48,8 @@ public class ServerThread extends Thread{
     	try{
     		hints.acceptTimeout=10000;
             socketHints.tcpNoDelay = false;
-            socketHints.trafficClass = 0x14;
-    		server = Gdx.net.newServerSocket(Protocol.TCP, IPv4 , port, hints);   
+            socketHints.trafficClass = 0x22;
+    		server = Gdx.net.newServerSocket(Protocol.TCP, IPv4 , 71830, hints);   
     		socket  = server.accept(socketHints);
     		Thread.sleep(2000);
         } catch (Exception e) {
