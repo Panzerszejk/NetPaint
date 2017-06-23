@@ -1,8 +1,6 @@
 package com.mygdx.paint;
 
 import java.io.IOException;
-import java.util.LinkedList;
-import java.util.Queue;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net.Protocol;
@@ -25,7 +23,6 @@ public class ServerThread extends Thread{
 	byte[] byteX=new byte[4];
 	byte[] byteY=new byte[4];
 	private Point lastpunkt=new Point(0,0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0);
-    public Queue<Point> fifoserver = new LinkedList<Point>();
 
 	public void sendData(Point current) {
 		byte[] bytesX = new byte[] { (byte) (current.x >> 24), (byte) (current.x >> 16), (byte) (current.x >> 8),
@@ -45,24 +42,6 @@ public class ServerThread extends Thread{
 		sendMsg[12] = current.b;
 	}
     
-    public void receiveData(){
-		if(receiveMsg!=null){
-			System.arraycopy(receiveMsg, 0, byteX, 0, 4);
-			System.arraycopy(receiveMsg, 4, byteY, 0, 4);
-			int x=(receiveMsg[0] << 24 | (receiveMsg[1] & 0xFF) << 16 | (receiveMsg[2] & 0xFF) << 8 | (receiveMsg[3] & 0xFF));
-			int y=(receiveMsg[4] << 24 | (receiveMsg[5] & 0xFF) << 16 | (receiveMsg[6] & 0xFF) << 8 | (receiveMsg[7] & 0xFF));
-			byte s=receiveMsg[8];
-			byte t=receiveMsg[9];
-			byte r=receiveMsg[10];
-			byte g=receiveMsg[11];
-			byte b=receiveMsg[12];
-			Point punkt=new Point(x, y, s, t, r, g, b,(byte)1);
-			if(punkt.x<800&&punkt.x>0&&punkt.y<600&&punkt.y>0)
-				fifoserver.add(punkt);
-			System.out.println(punkt.x+" "+punkt.y);
-			System.out.println("Size: "+fifoserver.size());
-		}
-	}
     
     public void run()
     {
@@ -80,15 +59,6 @@ public class ServerThread extends Thread{
         {
             if(socket != null)
             {
-            	try {
-                	//chwilowo klient tylko czyta, do odbioru/czytania potrzeba tokena
-                    //socket.getOutputStream().write(sendMsg); // wiadomosc wysylana
-                    socket.getInputStream().read(receiveMsg, 0, receiveMsg.length); //odebrana od servera
-                    receiveData();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    socket.dispose();
-                }
             	System.out.print("");
 				if (!lastpunkt.equal(punktsend)) {
 					try {

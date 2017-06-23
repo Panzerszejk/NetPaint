@@ -40,24 +40,6 @@ public class ClientThread extends Thread{
 		}
 	}
     
-	public void sendData(Point current) {
-		byte[] bytesX = new byte[] { (byte) (current.x >> 24), (byte) (current.x >> 16), (byte) (current.x >> 8),
-				(byte) current.x };
-		byte[] bytesY = new byte[] { (byte) (current.y >> 24), (byte) (current.y >> 16), (byte) (current.y >> 8),
-				(byte) current.y };
-		for (int i = 0; i < 4; i++) { // X to bytes
-			sendMsg[i] = bytesX[i];
-		}
-		for (int i = 4; i < 8; i++) { // Y to bytes
-			sendMsg[i] = bytesY[i - 4];
-		}
-		sendMsg[8] = current.brush_size;
-		sendMsg[9] = current.type;
-		sendMsg[10] = current.r;
-		sendMsg[11] = current.g;
-		sendMsg[12] = current.b;
-	}
-    
     public void run(){
         SocketHints hints = new SocketHints();
         hints.connectTimeout = 10000;
@@ -76,26 +58,12 @@ public class ClientThread extends Thread{
                 try {
                 	//chwilowo klient tylko czyta, do odbioru/czytania potrzeba tokena
                     //socket.getOutputStream().write(sendMsg); // wiadomosc wysylana
-                    socket.getInputStream().read(receiveMsg, 0, receiveMsg.length); //odebrana od servera
+                    socket.getInputStream().read(receiveMsg, 0, receiveMsg.length); //odebrana od server
                     receiveData();
                 } catch (IOException e) {
                     e.printStackTrace();
                     socket.dispose();
                 }
-                System.out.print("");
-				if (!lastpunkt.equal(punktsend)) {
-					try {
-						sendData(punktsend);
-						socket.getOutputStream().write(sendMsg);
-						lastpunkt.copy(punktsend);
-						// chwilowo serwer tylko wysyla, do odbioru/wysylania
-						// potrzeba tokena
-						// socket.getInputStream().read(receiveMsg, 0,receiveMsg.length);
-					} catch (IOException e) {
-						e.printStackTrace();
-						socket.dispose();
-					}
-				}
             }
         }       
     }

@@ -27,7 +27,8 @@ public class NetworkPaint extends ApplicationAdapter {
 	private Sprite sprite;
 	
 	public String ClientServerSelect;
-	public String ServerClientIP;
+	public String ClientIP;
+	public String ServerIP;
 	ClientThread client=new ClientThread();
 	ServerThread server=new ServerThread(); 
 	Point temp;
@@ -94,12 +95,10 @@ public class NetworkPaint extends ApplicationAdapter {
 		set_kursor(inputProcesor.get_brush_size(),inputProcesor.get_r(),inputProcesor.get_g(),inputProcesor.get_b()); //wywolanie funkcji obslugujacej zmiane kursora
 		
 		texture=ScreenUtils.getFrameBufferTexture(); //sciagam teksture na wstepie zeby nie wywalilo nam NullPointerException przy pierwszym rysowaniu
-		if(ClientServerSelect.equals("C")){  //wybor klient/serwer
-			client.IPv4=ServerClientIP;
+		if(ClientServerSelect.equals("online")){  //wybor klient/serwer
+			client.IPv4=ClientIP;
 			client.start();
-		}
-		else if(ClientServerSelect.equals("S")){
-			server.IPv4=ServerClientIP;
+			server.IPv4=ServerIP;
 			server.start();
 		}
 	}
@@ -126,7 +125,7 @@ public class NetworkPaint extends ApplicationAdapter {
 		}
 		}
 		}
-		if(ClientServerSelect.equals("S")||ClientServerSelect.equalsIgnoreCase("C")) {
+		if(ClientServerSelect.equals("online")) {
 			if(current0!=null) {
 				server.punktsend.copy(current0);
 			}
