@@ -156,18 +156,8 @@ public class NetworkPaint extends ApplicationAdapter {
 			if(previous0 != null){ //Sprawdzenie, czy nie jest to pierwszy punkt
 				if(current0.type == 2&&previous0.type!=0 ){ //Jesli mysz jest przeciagana
 					camera.update();
-					int x1, x2, y1, y2;
-					x1 = previous0.x;
-					x2 = current0.x;
-					y1 = height - previous0.y;
-					y2 = height - current0.y;
-					shapeRenderer.begin(ShapeType.Filled);
-					shapeRenderer.setColor((current0.r & 0xff)/255f, (current0.g & 0xff)/255f, (current0.b & 0xff)/255f, 1f);
 					
-					shapeRenderer.circle(x1,y1,current0.brush_size/2);
-					shapeRenderer.rectLine(x1,y1,x2,y2,current0.brush_size); //Rysujemy "zaokralona" linie
-					shapeRenderer.circle(x2,y2,current0.brush_size/2);
-					shapeRenderer.end();
+					current0.draw(shapeRenderer,previous0.x,height-previous0.y,height);
 				}
 				if(previous0.type == 1){ //Jesli przycisk myszy klikniety
 					camera.update();
@@ -183,6 +173,12 @@ public class NetworkPaint extends ApplicationAdapter {
 		
 			}
 			previous0.copy(current0);  //Przepisuje punkt za kazdym razem, zeby uniknac problemow z nullem
+			if(current0.type==5){
+				Shape bob = new Point(current0.x, current0.y, current0.brush_size, current0.type, current0.r, current0.g, current0.b,current0.id);
+				bob.draw(shapeRenderer,200,height-200,height);
+				Shape bob1 = new Rect(current0.x, current0.y, current0.brush_size, current0.type, current0.r, current0.g, current0.b,current0.id);
+				bob1.draw(shapeRenderer, 20, 20, height);
+			}
 		}
 		
 		if(current1 != null){ //Musimy sprawdzic czy przypadkiem PosTab nie jest pusty(null) bo inaczej wywali nam NullPointerException

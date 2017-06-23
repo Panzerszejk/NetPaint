@@ -173,7 +173,10 @@ public class MyInputProcesor implements InputProcessor {
     	}
     	
     	if(button == Buttons.RIGHT) {
-    		
+    		point.x = x;
+    		point.y = y;
+    		point.type = (byte)5;
+    		fifo.add(point);
     	}
         return false;
     }
