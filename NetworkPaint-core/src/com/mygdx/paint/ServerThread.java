@@ -42,7 +42,6 @@ public class ServerThread extends Thread{
 		sendMsg[10] = current.r;
 		sendMsg[11] = current.g;
 		sendMsg[12] = current.b;
-
 	}
     
     
@@ -63,16 +62,12 @@ public class ServerThread extends Thread{
             if(socket != null)
             {
                 try {
-					if (!lastpunkt.compare(punktsend)) {
+					if (!lastpunkt.equal(punktsend)) {
 						sendData(punktsend);
 						socket.getOutputStream().write(sendMsg);
 						lastpunkt.copy(punktsend);
 					}
-
-
-    				System.out.println((sendMsg[0] << 24 | (sendMsg[1] & 0xFF) << 16 | (sendMsg[2] & 0xFF) << 8 | (sendMsg[3] & 0xFF))+"  "+(sendMsg[4] << 24 | (sendMsg[5] & 0xFF) << 16 | (sendMsg[6] & 0xFF) << 8 | (sendMsg[7] & 0xFF)));
-
-    			
+    				//System.out.println((sendMsg[0] << 24 | (sendMsg[1] & 0xFF) << 16 | (sendMsg[2] & 0xFF) << 8 | (sendMsg[3] & 0xFF))+"  "+(sendMsg[4] << 24 | (sendMsg[5] & 0xFF) << 16 | (sendMsg[6] & 0xFF) << 8 | (sendMsg[7] & 0xFF)));
                 	//chwilowo serwer tylko wysyla, do odbioru/wysylania potrzeba tokena
                     //socket.getInputStream().read(receiveMsg, 0, receiveMsg.length);
                 } catch (IOException e) {
@@ -80,7 +75,6 @@ public class ServerThread extends Thread{
                     server.dispose();
                 }
             }
-                    
         }
     }
 }
