@@ -21,29 +21,6 @@ public class ClientThread extends Thread{
     public Queue<Point> fifoclient = new LinkedList<Point>();
 	public Point lastpunkt= new Point(0,0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0);
     
-    public void sendData(Point current){
-		if(current!=null&&current.type!=0){
-			if (lastpunkt.x != current.x && lastpunkt.y != current.y) {
-				byte[] bytesX = new byte[] { (byte) (current.x >> 24), (byte) (current.x >> 16),
-						(byte) (current.x >> 8), (byte) current.x };
-				byte[] bytesY = new byte[] { (byte) (current.y >> 24), (byte) (current.y >> 16),
-						(byte) (current.y >> 8), (byte) current.y };
-				for (int i = 0; i < 4; i++) { // X to bytes
-					sendMsg[i] = bytesX[i];
-				}
-				for (int i = 4; i < 8; i++) { // Y to bytes
-					sendMsg[i] = bytesY[i - 4];
-				}
-				sendMsg[8] = current.brush_size;
-				sendMsg[9] = current.type;
-				sendMsg[10] = current.r;
-				sendMsg[11] = current.g;
-				sendMsg[12] = current.b;
-				lastpunkt.copy(current);
-			}
-		}
-	}
-    
     public void receiveData(){
 		if(receiveMsg!=null){
 			System.arraycopy(receiveMsg, 0, byteX, 0, 4);
@@ -77,7 +54,8 @@ public class ClientThread extends Thread{
                 	//chwilowo klient tylko czyta, do odbioru/czytania potrzeba tokena
                     //socket.getOutputStream().write(sendMsg); // wiadomosc wysylana
                     socket.getInputStream().read(receiveMsg, 0, receiveMsg.length); //odebrana od servera
-                	receiveData();
+    				System.out.println((receiveMsg[0] << 24 | (receiveMsg[1] & 0xFF) << 16 | (receiveMsg[2] & 0xFF) << 8 | (receiveMsg[3] & 0xFF))+"  "+(receiveMsg[4] << 24 | (receiveMsg[5] & 0xFF) << 16 | (receiveMsg[6] & 0xFF) << 8 | (receiveMsg[7] & 0xFF)));
+                    receiveData();
                 } catch (IOException e) {
                     e.printStackTrace();
                     socket.dispose();

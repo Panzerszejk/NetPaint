@@ -26,9 +26,9 @@ public class ServerThread extends Thread{
 	byte[] byteY=new byte[4];
 	private Point lastpunkt=new Point(0,0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0);
 	
-    public void sendData(Point current) throws IOException{
+    public void sendData(Point current){
 		if(current!=null&&current.type!=0){
-			if (!lastpunkt.compare(current)) {
+			//if (!lastpunkt.compare(current)) {
 				byte[] bytesX = new byte[] { (byte) (current.x >> 24), (byte) (current.x >> 16),
 						(byte) (current.x >> 8), (byte) current.x };
 				byte[] bytesY = new byte[] { (byte) (current.y >> 24), (byte) (current.y >> 16),
@@ -45,26 +45,10 @@ public class ServerThread extends Thread{
 				sendMsg[11] = current.g;
 				sendMsg[12] = current.b;
 				lastpunkt.copy(current);
-				socket.getOutputStream().write(sendMsg);
-			}
+			//}
 		}
 	}
     
-    public void receiveData(){
-		if(receiveMsg!=null){
-			System.arraycopy(receiveMsg, 0, byteX, 0, 4);
-			System.arraycopy(receiveMsg, 4, byteY, 0, 4);
-			int x=(receiveMsg[0] << 24 | (receiveMsg[1] & 0xFF) << 16 | (receiveMsg[2] & 0xFF) << 8 | (receiveMsg[3] & 0xFF));
-			int y=(receiveMsg[4] << 24 | (receiveMsg[5] & 0xFF) << 16 | (receiveMsg[6] & 0xFF) << 8 | (receiveMsg[7] & 0xFF));
-			byte s=receiveMsg[8];
-			byte t=receiveMsg[9];
-			byte r=receiveMsg[10];
-			byte g=receiveMsg[11];
-			byte b=receiveMsg[12];
-			Point punkt=new Point(x, y, s, t, r, g, b);
-			punktreceive.copy(punkt);
-		}
-	}
     
     public void run()
     {
@@ -83,6 +67,8 @@ public class ServerThread extends Thread{
             {
                 try {
                 	sendData(punktsend);
+                	//System.out.println(punktsend.x+" "+punktsend.y);
+    				socket.getOutputStream().write(sendMsg);
     				System.out.println((sendMsg[0] << 24 | (sendMsg[1] & 0xFF) << 16 | (sendMsg[2] & 0xFF) << 8 | (sendMsg[3] & 0xFF))+"  "+(sendMsg[4] << 24 | (sendMsg[5] & 0xFF) << 16 | (sendMsg[6] & 0xFF) << 8 | (sendMsg[7] & 0xFF)));
                 	//chwilowo serwer tylko wysyla, do odbioru/wysylania potrzeba tokena
                     //socket.getInputStream().read(receiveMsg, 0, receiveMsg.length);
