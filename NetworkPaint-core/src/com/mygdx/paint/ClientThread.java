@@ -56,6 +56,7 @@ public class ClientThread extends Thread{
 			byte b=receiveMsg[12];
 			Point punkt=new Point(x, y, s, t, r, g, b);
 			punktreceive.copy(punkt);
+			Gdx.graphics.requestRendering();
 		}
 	}
     

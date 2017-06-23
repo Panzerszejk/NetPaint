@@ -70,7 +70,7 @@ public class NetworkPaint extends ApplicationAdapter {
 		camera.update();
 		shapeRenderer = new ShapeRenderer();
 
-		Gdx.graphics.setContinuousRendering(true); //wylacza ciagle renderowanie. Renderuje gdy pojawi sie jakis event
+		Gdx.graphics.setContinuousRendering(false); //wylacza ciagle renderowanie. Renderuje gdy pojawi sie jakis event
 		//zmienic na true, przy last wersji!!!
 		
 
@@ -122,7 +122,8 @@ public class NetworkPaint extends ApplicationAdapter {
 		//batch.setColor(190/255f, 190/255f, 190/255f, 0f);
 		sprite.draw(batch);
 		batch.end();
-		
+		texture.getTexture().dispose();
+		sprite.getTexture().dispose();
 		if(current != null){ //Musimy sprawdzic czy przypadkiem PosTab nie jest pusty(null) bo inaczej wywali nam NullPointerException
 			set_kursor(current.brush_size,current.r,current.g,current.b);
 			if(previous != null){ //Sprawdzenie, czy nie jest to pierwszy punkt
