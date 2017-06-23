@@ -71,7 +71,7 @@ public class NetworkPaint extends ApplicationAdapter {
 		camera.update();
 		shapeRenderer = new ShapeRenderer();
 
-		Gdx.graphics.setContinuousRendering(false); //wylacza ciagle renderowanie. Renderuje gdy pojawi sie jakis event
+		Gdx.graphics.setContinuousRendering(true); //wylacza ciagle renderowanie. Renderuje gdy pojawi sie jakis event
 		//zmienic na true, przy last wersji!!!
 		
 
@@ -111,7 +111,6 @@ public class NetworkPaint extends ApplicationAdapter {
 			if(received!=null){
 				inputProcesor.addFifo(received);
 			}
-
 		}
 		
 		//Czyszczenie ekranu

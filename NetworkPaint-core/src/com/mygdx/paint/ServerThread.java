@@ -63,13 +63,16 @@ public class ServerThread extends Thread{
             if(socket != null)
             {
                 try {
-					if (lastpunkt.x!=punktsend.x&&lastpunkt.y!=punktsend.y&&punktsend!=null) {
+					if (!lastpunkt.compare(punktsend)) {
 						sendData(punktsend);
 						socket.getOutputStream().write(sendMsg);
 						lastpunkt.copy(punktsend);
 					}
 
+
     				System.out.println((sendMsg[0] << 24 | (sendMsg[1] & 0xFF) << 16 | (sendMsg[2] & 0xFF) << 8 | (sendMsg[3] & 0xFF))+"  "+(sendMsg[4] << 24 | (sendMsg[5] & 0xFF) << 16 | (sendMsg[6] & 0xFF) << 8 | (sendMsg[7] & 0xFF)));
+
+    			
                 	//chwilowo serwer tylko wysyla, do odbioru/wysylania potrzeba tokena
                     //socket.getInputStream().read(receiveMsg, 0, receiveMsg.length);
                 } catch (IOException e) {
