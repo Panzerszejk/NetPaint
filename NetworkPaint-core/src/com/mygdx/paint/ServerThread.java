@@ -81,7 +81,6 @@ public class ServerThread extends Thread{
     				System.out.println(punktsend.x+"  "+punktsend.y);
                 	sendData(punktsend);
     				socket.getOutputStream().write(sendMsg);
-    				System.out.println("type:"+sendMsg[9]);
                 	//chwilowo serwer tylko wysyla, do odbioru/wysylania potrzeba tokena
                     //socket.getInputStream().read(receiveMsg, 0, receiveMsg.length);
                 } catch (IOException e) {
