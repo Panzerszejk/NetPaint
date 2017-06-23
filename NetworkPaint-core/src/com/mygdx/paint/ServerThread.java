@@ -9,11 +9,13 @@ import com.badlogic.gdx.net.ServerSocketHints;
 import com.badlogic.gdx.net.Socket;
 import com.badlogic.gdx.net.SocketHints;
 
+
 public class ServerThread extends Thread{
 	ServerSocketHints hints = new ServerSocketHints();
     SocketHints socketHints = new SocketHints();
     ServerSocket server;
     Socket socket;
+    static ServerThread instance;
     public byte[] receiveMsg = new byte[13];
     public byte[] sendMsg = new byte[13];
     public String IPv4 = new String();
@@ -42,7 +44,16 @@ public class ServerThread extends Thread{
 		sendMsg[12] = current.b;
 	}
     
-    
+    public static ServerThread get() {
+        if (instance == null) instance = new ServerThread();
+        return instance;
+    }
+	
+    private ServerThread()
+    {
+    	
+    }
+	
     public void run()
     {
     	try{

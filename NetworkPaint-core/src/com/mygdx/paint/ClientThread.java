@@ -11,6 +11,7 @@ import com.badlogic.gdx.net.SocketHints;
 
 public class ClientThread extends Thread{
     Socket socket;
+    static ClientThread instance;
     public byte[] receiveMsg = new byte[13];
     public byte[] sendMsg = new byte[13];
     public String IPv4 = new String();
@@ -21,6 +22,16 @@ public class ClientThread extends Thread{
     public Queue<Point> fifoclient = new LinkedList<Point>();
 	public Point lastpunkt= new Point(0,0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)1);
     
+    public static ClientThread get() {
+        if (instance == null) instance = new ClientThread();
+        return instance;
+    }
+	
+    private ClientThread()
+    {
+    	
+    }
+	
     public void receiveData(){
 		if(receiveMsg!=null){
 			System.arraycopy(receiveMsg, 0, byteX, 0, 4);
