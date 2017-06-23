@@ -18,7 +18,7 @@ public class ClientThread extends Thread{
 	byte[] byteY=new byte[4];
 	
     public void sendData(Point current){
-		if(current!=null){
+		if(current!=null&&current.type!=0){
 		byte[] bytesX = new byte[] { 
 		        (byte)(current.x >> 24),
 		        (byte)(current.x >> 16),

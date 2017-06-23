@@ -22,8 +22,8 @@ public class ServerThread extends Thread{
 	byte[] byteX=new byte[4];
 	byte[] byteY=new byte[4];
 	
-    public void sendData(Point current){
-		if(current!=null){
+    public void sendData(Point current) throws IOException{
+		if(current!=null&&current.type!=0){
 		byte[] bytesX = new byte[] { 
 		        (byte)(current.x >> 24),
 		        (byte)(current.x >> 16),
@@ -45,6 +45,7 @@ public class ServerThread extends Thread{
 		sendMsg[10]=current.r;
 		sendMsg[11]=current.g;
 		sendMsg[12]=current.b;
+        socket.getOutputStream().write(sendMsg);                                                                          //---
 		}
 	}
     
@@ -83,9 +84,6 @@ public class ServerThread extends Thread{
                 	sendData(punktsend);
                 	//chwilowo serwer tylko wysyla, do odbioru/wysylania potrzeba tokena
                     //socket.getInputStream().read(receiveMsg, 0, receiveMsg.length);
-            		System.out.println(punktsend.type);
-                    socket.getOutputStream().write(sendMsg);                                                                          //---
-            		System.out.println(sendMsg[9]);
                 } catch (IOException e) {
                     e.printStackTrace();
                     server.dispose();
