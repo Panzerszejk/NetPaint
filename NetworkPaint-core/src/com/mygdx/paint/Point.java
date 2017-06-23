@@ -37,6 +37,14 @@ public class Point {
 		this.b = point.b;
 	}
 	
+	public boolean compare(Point point){
+		if(this.type!=point.type&&this.x!=point.x&&this.y!=point.y&&this.brush_size!=point.brush_size&&this.r!=point.r){
+			return false;
+		}
+		else return true;
+		
+	}
+	
 	public Point(Point point)
 	{
 		this.x = point.x;
