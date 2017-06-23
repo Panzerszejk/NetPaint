@@ -33,7 +33,10 @@ public class ClientThread extends Thread{
 			byte g=receiveMsg[11];
 			byte b=receiveMsg[12];
 			Point punkt=new Point(x, y, s, t, r, g, b);
-			fifoclient.add(punkt);
+			if(punkt.x<800&&punkt.x>0&&punkt.y<600&&punkt.y>0)
+				fifoclient.add(punkt);
+			System.out.println(punkt.x+" "+punkt.y);
+			System.out.println("Size: "+fifoclient.size());
 		}
 	}
     
@@ -56,7 +59,6 @@ public class ClientThread extends Thread{
                 	//chwilowo klient tylko czyta, do odbioru/czytania potrzeba tokena
                     //socket.getOutputStream().write(sendMsg); // wiadomosc wysylana
                     socket.getInputStream().read(receiveMsg, 0, receiveMsg.length); //odebrana od servera
-    				System.out.println((receiveMsg[0] << 24 | (receiveMsg[1] & 0xFF) << 16 | (receiveMsg[2] & 0xFF) << 8 | (receiveMsg[3] & 0xFF))+"  "+(receiveMsg[4] << 24 | (receiveMsg[5] & 0xFF) << 16 | (receiveMsg[6] & 0xFF) << 8 | (receiveMsg[7] & 0xFF)));
                     receiveData();
                 } catch (IOException e) {
                     e.printStackTrace();
