@@ -1,8 +1,6 @@
 package com.mygdx.paint;
 
 import java.io.IOException;
-import java.util.LinkedList;
-import java.util.Queue;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net.Protocol;
@@ -18,8 +16,8 @@ public class ServerThread extends Thread{
     ServerSocket server;
     Socket socket;
     static ServerThread instance;
-    public byte[] receiveMsg = new byte[14];
-    public byte[] sendMsg = new byte[14];
+    public byte[] receiveMsg = new byte[13];
+    public byte[] sendMsg = new byte[13];
     public String IPv4 = new String();
     public Point punktsend=new Point(0,0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0); 
     //kiedy dam null wywala nullpointerexception ??
@@ -27,7 +25,7 @@ public class ServerThread extends Thread{
 	byte[] byteX=new byte[4];
 	byte[] byteY=new byte[4];
 	private Point lastpunkt=new Point(0,0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0);
-	
+
 	public void sendData(Point current) {
 		byte[] bytesX = new byte[] { (byte) (current.x >> 24), (byte) (current.x >> 16), (byte) (current.x >> 8),
 				(byte) current.x };
@@ -44,7 +42,6 @@ public class ServerThread extends Thread{
 		sendMsg[10] = current.r;
 		sendMsg[11] = current.g;
 		sendMsg[12] = current.b;
-		sendMsg[13] = current.id;
 	}
     
     public static ServerThread get() {
@@ -62,10 +59,10 @@ public class ServerThread extends Thread{
     	try{
     		hints.acceptTimeout=10000;
             socketHints.tcpNoDelay = false;
-            socketHints.trafficClass = 0x14;
-    		server = Gdx.net.newServerSocket(Protocol.TCP, IPv4 , 11564, hints);   
+            socketHints.trafficClass = 0x22;
+    		server = Gdx.net.newServerSocket(Protocol.TCP, IPv4 , 11830, hints);   
     		socket  = server.accept(socketHints);
-    		Thread.sleep(500);
+    		Thread.sleep(2000);
         } catch (Exception e) {
      	   e.printStackTrace();
         }
@@ -87,6 +84,7 @@ public class ServerThread extends Thread{
 						server.dispose();
 					}
 				}
+				
             }
         }
     }
