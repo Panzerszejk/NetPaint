@@ -126,12 +126,10 @@ public class NetworkPaint extends ApplicationAdapter {
 		}
 		}
 		}
-		if(ClientServerSelect.equals("S")) {
+		if(ClientServerSelect.equals("S")||ClientServerSelect.equalsIgnoreCase("C")) {
 			if(current0!=null) {
 				server.punktsend.copy(current0);
 			}
-		}
-		if(ClientServerSelect.equals("C")) {
 			received=client.fifoclient.poll();
 			if(received!=null){
 				inputProcesor.addFifo(received);

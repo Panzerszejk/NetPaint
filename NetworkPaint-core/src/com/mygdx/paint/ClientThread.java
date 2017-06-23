@@ -11,8 +11,8 @@ import com.badlogic.gdx.net.SocketHints;
 
 public class ClientThread extends Thread{
     Socket socket;
-    public byte[] receiveMsg = new byte[14];
-    public byte[] sendMsg = new byte[14];
+    public byte[] receiveMsg = new byte[13];
+    public byte[] sendMsg = new byte[13];
     public String IPv4 = new String();
     public Point punktsend=new Point(0,0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)1);
     public Point punktreceive=new Point(0,0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)1);
@@ -32,13 +32,30 @@ public class ClientThread extends Thread{
 			byte r=receiveMsg[10];
 			byte g=receiveMsg[11];
 			byte b=receiveMsg[12];
-			byte id=(byte)1;
-			Point punkt=new Point(x, y, s, t, r, g, b,id);
+			Point punkt=new Point(x, y, s, t, r, g, b,(byte)1);
 			if(punkt.x<800&&punkt.x>0&&punkt.y<600&&punkt.y>0)
 				fifoclient.add(punkt);
 			System.out.println(punkt.x+" "+punkt.y);
 			System.out.println("Size: "+fifoclient.size());
 		}
+	}
+    
+	public void sendData(Point current) {
+		byte[] bytesX = new byte[] { (byte) (current.x >> 24), (byte) (current.x >> 16), (byte) (current.x >> 8),
+				(byte) current.x };
+		byte[] bytesY = new byte[] { (byte) (current.y >> 24), (byte) (current.y >> 16), (byte) (current.y >> 8),
+				(byte) current.y };
+		for (int i = 0; i < 4; i++) { // X to bytes
+			sendMsg[i] = bytesX[i];
+		}
+		for (int i = 4; i < 8; i++) { // Y to bytes
+			sendMsg[i] = bytesY[i - 4];
+		}
+		sendMsg[8] = current.brush_size;
+		sendMsg[9] = current.type;
+		sendMsg[10] = current.r;
+		sendMsg[11] = current.g;
+		sendMsg[12] = current.b;
 	}
     
     public void run(){
@@ -65,6 +82,20 @@ public class ClientThread extends Thread{
                     e.printStackTrace();
                     socket.dispose();
                 }
+                System.out.print("");
+				if (!lastpunkt.equal(punktsend)) {
+					try {
+						sendData(punktsend);
+						socket.getOutputStream().write(sendMsg);
+						lastpunkt.copy(punktsend);
+						// chwilowo serwer tylko wysyla, do odbioru/wysylania
+						// potrzeba tokena
+						// socket.getInputStream().read(receiveMsg, 0,receiveMsg.length);
+					} catch (IOException e) {
+						e.printStackTrace();
+						socket.dispose();
+					}
+				}
             }
         }       
     }
