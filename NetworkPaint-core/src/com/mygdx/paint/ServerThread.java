@@ -54,7 +54,8 @@ public class ServerThread extends Thread{
     {
     	try{
     		hints.acceptTimeout=10000;
-    		socketHints = new SocketHints();
+            socketHints.tcpNoDelay = false;
+            socketHints.trafficClass = 0x14;
     		server = Gdx.net.newServerSocket(Protocol.TCP, IPv4 , 11564, hints);   
     		socket  = server.accept(socketHints);
     		Thread.sleep(500);
@@ -69,7 +70,7 @@ public class ServerThread extends Thread{
                 	sendData(punktsend);
                 	//System.out.println(punktsend.x+" "+punktsend.y);
     				socket.getOutputStream().write(sendMsg);
-    				System.out.println((sendMsg[0] << 24 | (sendMsg[1] & 0xFF) << 16 | (sendMsg[2] & 0xFF) << 8 | (sendMsg[3] & 0xFF))+"  "+(sendMsg[4] << 24 | (sendMsg[5] & 0xFF) << 16 | (sendMsg[6] & 0xFF) << 8 | (sendMsg[7] & 0xFF)));
+    				//System.out.println((sendMsg[0] << 24 | (sendMsg[1] & 0xFF) << 16 | (sendMsg[2] & 0xFF) << 8 | (sendMsg[3] & 0xFF))+"  "+(sendMsg[4] << 24 | (sendMsg[5] & 0xFF) << 16 | (sendMsg[6] & 0xFF) << 8 | (sendMsg[7] & 0xFF)));
                 	//chwilowo serwer tylko wysyla, do odbioru/wysylania potrzeba tokena
                     //socket.getInputStream().read(receiveMsg, 0, receiveMsg.length);
                 } catch (IOException e) {

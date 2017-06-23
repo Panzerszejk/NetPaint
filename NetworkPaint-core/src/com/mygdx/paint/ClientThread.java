@@ -40,6 +40,8 @@ public class ClientThread extends Thread{
     public void run(){
         SocketHints hints = new SocketHints();
         hints.connectTimeout = 10000;
+        hints.tcpNoDelay = false;
+        hints.trafficClass = 0x14;
         try {
            socket = Gdx.net.newClientSocket(Protocol.TCP, IPv4 , 11564, hints );
            Thread.sleep(500, 0);
