@@ -40,7 +40,7 @@ public class Point {
 	}
 	
 	public boolean equal(Point point){
-		if(this.type==point.type&&this.x==point.x&&this.y==point.y&&this.brush_size==point.brush_size&&this.r==point.r&&this.id==point.id){
+		if(this.type==point.type&&this.x==point.x&&this.y==point.y&&this.brush_size==point.brush_size&&this.r==point.r){
 			return true;
 		}
 		else {
