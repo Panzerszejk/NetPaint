@@ -20,19 +20,19 @@ public class NetworkPaint extends ApplicationAdapter {
 	
 	public int width;
 	public int height;
-	
-	
-	private MyInputProcesor inputProcesor;
+	byte brushSize;
+	public MyInputProcesor inputProcesor;
 	private SpriteBatch batch;
 	private TextureRegion texture;
 	private Sprite sprite;
 	
 	public String ClientServerSelect;
 	public String ServerClientIP;
-	
+	ClientThread client=new ClientThread();
+	ServerThread server=new ServerThread();  
 	Point current;  //tablica pozycji obecnej
 	Point previous;	//tablica pozycji poprzedniej
-	
+	Point received;
 	public void set_kursor(byte rozmiar,byte r,byte g,byte b)
 	{
 		byte brushSizePow2=rozmiar;
@@ -55,10 +55,14 @@ public class NetworkPaint extends ApplicationAdapter {
 		pm.dispose();
 	}
 	
+	
+	
+	
+	
 	@Override
 	public void create () {
 		
-		
+
 		width = Gdx.graphics.getWidth();
 		height = Gdx.graphics.getHeight();
 		camera = new OrthographicCamera();
@@ -82,14 +86,11 @@ public class NetworkPaint extends ApplicationAdapter {
 		set_kursor(inputProcesor.get_brush_size(),inputProcesor.get_r(),inputProcesor.get_g(),inputProcesor.get_b()); //wywolanie funkcji obslugujacej zmiane kursora
 		
 		texture=ScreenUtils.getFrameBufferTexture(); //sciagam teksture na wstepie zeby nie wywalilo nam NullPointerException przy pierwszym rysowaniu
-		
-		if(ClientServerSelect=="C"){  //wybor klient/serwer
-			ClientThread client=new ClientThread();
+		if(ClientServerSelect.equals("C")){  //wybor klient/serwer
 			client.IPv4=ServerClientIP;
 			client.start();
 		}
-		else if(ClientServerSelect=="S"){
-			ServerThread server=new ServerThread();  
+		else if(ClientServerSelect.equals("S")){
 			server.IPv4=ServerClientIP;
 			server.start();
 		}
@@ -99,12 +100,21 @@ public class NetworkPaint extends ApplicationAdapter {
 	public void render () {
 
 		current=inputProcesor.pollFifo();  //Metoda zdejmuje ostatni element z listy fifo. Jesli elementow nie ma zwraca null
-
+		if(ClientServerSelect.equals("S")) {
+			if(current!=null) {
+				server.punktsend.copy(current);
+			}
+		}
+		if(ClientServerSelect.equals("C")) {
+			received=client.fifoclient.poll();
+			if(received!=null){
+				inputProcesor.addFifo(received);
+			}
+		}
 		
 		//Czyszczenie ekranu
 		Gdx.gl.glClearColor(1f, 1f, 1f, 1f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-
 
 		//Rysujemy w kazdej iteracji to co mamy w teksturze
 		sprite = new Sprite(texture);
@@ -113,7 +123,8 @@ public class NetworkPaint extends ApplicationAdapter {
 		//batch.setColor(190/255f, 190/255f, 190/255f, 0f);
 		sprite.draw(batch);
 		batch.end();
-		
+		texture.getTexture().dispose();
+		sprite.getTexture().dispose();
 		if(current != null){ //Musimy sprawdzic czy przypadkiem PosTab nie jest pusty(null) bo inaczej wywali nam NullPointerException
 			set_kursor(current.brush_size,current.r,current.g,current.b);
 			if(previous != null){ //Sprawdzenie, czy nie jest to pierwszy punkt
@@ -154,8 +165,12 @@ public class NetworkPaint extends ApplicationAdapter {
 	@Override
 	public void dispose () {
 		batch.dispose();
-
-
 	}
+	
+	public void addShutdownHook(Thread hook){
+		server.server.dispose();
+		client.socket.dispose();
+	}
+
 }
 

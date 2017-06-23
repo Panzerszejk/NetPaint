@@ -17,6 +17,9 @@ public class MyInputProcesor implements InputProcessor {
     public Point pollFifo () {
     	return fifo.poll();
     }
+    public void addFifo(Point object){
+    	fifo.add(object);
+    }
     
     public byte get_r()
     {
