@@ -1,7 +1,5 @@
 package com.mygdx.paint;
 
-import java.nio.ByteBuffer;
-
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -161,5 +159,10 @@ public class NetworkPaint extends ApplicationAdapter {
 
 
 	}
+	public void addShutdownHook(Thread hook){
+		server.server.dispose();
+		client.socket.dispose();
+	}
+
 }
 
