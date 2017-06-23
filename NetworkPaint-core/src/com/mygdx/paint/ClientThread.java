@@ -1,6 +1,8 @@
 package com.mygdx.paint;
 
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.Queue;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net.Protocol;
@@ -16,6 +18,7 @@ public class ClientThread extends Thread{
     public Point punktreceive=new Point(0,0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0);
 	byte[] byteX=new byte[4];
 	byte[] byteY=new byte[4];
+    public Queue<Point> fifoclient = new LinkedList<Point>();
 	
     public void sendData(Point current){
 		if(current!=null&&current.type!=0){
@@ -55,8 +58,7 @@ public class ClientThread extends Thread{
 			byte g=receiveMsg[11];
 			byte b=receiveMsg[12];
 			Point punkt=new Point(x, y, s, t, r, g, b);
-			punktreceive.copy(punkt);
-			Gdx.graphics.requestRendering();
+			fifoclient.add(punkt);
 		}
 	}
     

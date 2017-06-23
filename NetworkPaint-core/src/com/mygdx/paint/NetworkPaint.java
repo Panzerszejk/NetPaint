@@ -32,7 +32,7 @@ public class NetworkPaint extends ApplicationAdapter {
 	ServerThread server=new ServerThread();  
 	Point current;  //tablica pozycji obecnej
 	Point previous;	//tablica pozycji poprzedniej
-	
+	Point received;
 	public void set_kursor(byte rozmiar,byte r,byte g,byte b)
 	{
 		byte brushSizePow2=rozmiar;
@@ -106,8 +106,9 @@ public class NetworkPaint extends ApplicationAdapter {
 			}
 		}
 		if(ClientServerSelect.equals("C")) {
-			if(client.punktreceive!=null){
-				inputProcesor.addFifo(client.punktreceive);
+			received=client.fifoclient.poll();
+			if(received!=null){
+				inputProcesor.addFifo(received);
 			}
 		}
 		
