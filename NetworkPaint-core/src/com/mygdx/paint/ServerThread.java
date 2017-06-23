@@ -16,15 +16,15 @@ public class ServerThread extends Thread{
     SocketHints socketHints = new SocketHints();
     ServerSocket server;
     Socket socket;
-    public byte[] receiveMsg = new byte[13];
-    public byte[] sendMsg = new byte[13];
+    public byte[] receiveMsg = new byte[14];
+    public byte[] sendMsg = new byte[14];
     public String IPv4 = new String();
-    public Point punktsend=new Point(0,0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0); 
+    public Point punktsend=new Point(0,0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0); 
     //kiedy dam null wywala nullpointerexception ??
-    public Point punktreceive=new Point(0,0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0);
+    public Point punktreceive=new Point(0,0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0);
 	byte[] byteX=new byte[4];
 	byte[] byteY=new byte[4];
-	private Point lastpunkt=new Point(0,0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0);
+	private Point lastpunkt=new Point(0,0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0);
 	
 	public void sendData(Point current) {
 		byte[] bytesX = new byte[] { (byte) (current.x >> 24), (byte) (current.x >> 16), (byte) (current.x >> 8),
@@ -42,7 +42,7 @@ public class ServerThread extends Thread{
 		sendMsg[10] = current.r;
 		sendMsg[11] = current.g;
 		sendMsg[12] = current.b;
-
+		sendMsg[13] = current.id;
 	}
     
     
@@ -62,26 +62,27 @@ public class ServerThread extends Thread{
         {
             if(socket != null)
             {
+<<<<<<< HEAD
                 try {
 					if (lastpunkt.x != punktsend.x && lastpunkt.y != punktsend.y){
 					
+=======
+            	System.out.print("");
+				if (!lastpunkt.equal(punktsend)) {
+					try {
+>>>>>>> 010e72f46ec0c604bb8f263fe45860b51a89170a
 						sendData(punktsend);
 						socket.getOutputStream().write(sendMsg);
 						lastpunkt.copy(punktsend);
+						// chwilowo serwer tylko wysyla, do odbioru/wysylania
+						// potrzeba tokena
+						// socket.getInputStream().read(receiveMsg, 0,receiveMsg.length);
+					} catch (IOException e) {
+						e.printStackTrace();
+						server.dispose();
 					}
-
-
-    				System.out.println((sendMsg[0] << 24 | (sendMsg[1] & 0xFF) << 16 | (sendMsg[2] & 0xFF) << 8 | (sendMsg[3] & 0xFF))+"  "+(sendMsg[4] << 24 | (sendMsg[5] & 0xFF) << 16 | (sendMsg[6] & 0xFF) << 8 | (sendMsg[7] & 0xFF)));
-
-    			
-                	//chwilowo serwer tylko wysyla, do odbioru/wysylania potrzeba tokena
-                    //socket.getInputStream().read(receiveMsg, 0, receiveMsg.length);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    server.dispose();
-                }
+				}
             }
-                    
         }
     }
 }

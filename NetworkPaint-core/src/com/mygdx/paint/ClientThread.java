@@ -11,15 +11,15 @@ import com.badlogic.gdx.net.SocketHints;
 
 public class ClientThread extends Thread{
     Socket socket;
-    public byte[] receiveMsg = new byte[13];
-    public byte[] sendMsg = new byte[13];
+    public byte[] receiveMsg = new byte[14];
+    public byte[] sendMsg = new byte[14];
     public String IPv4 = new String();
-    public Point punktsend=new Point(0,0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0);
-    public Point punktreceive=new Point(0,0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0);
+    public Point punktsend=new Point(0,0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)1);
+    public Point punktreceive=new Point(0,0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)1);
 	byte[] byteX=new byte[4];
 	byte[] byteY=new byte[4];
     public Queue<Point> fifoclient = new LinkedList<Point>();
-	public Point lastpunkt= new Point(0,0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0);
+	public Point lastpunkt= new Point(0,0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)1);
     
     public void receiveData(){
 		if(receiveMsg!=null){
@@ -32,7 +32,8 @@ public class ClientThread extends Thread{
 			byte r=receiveMsg[10];
 			byte g=receiveMsg[11];
 			byte b=receiveMsg[12];
-			Point punkt=new Point(x, y, s, t, r, g, b);
+			byte id=(byte)1;
+			Point punkt=new Point(x, y, s, t, r, g, b,id);
 			if(punkt.x<800&&punkt.x>0&&punkt.y<600&&punkt.y>0)
 				fifoclient.add(punkt);
 			System.out.println(punkt.x+" "+punkt.y);

@@ -12,7 +12,7 @@ public class MyInputProcesor implements InputProcessor {
 
     private Queue<Point> fifo = new LinkedList<Point>();
    
-    private Point point = new Point(0,0,(byte)8,(byte)0,(byte)0,(byte)0,(byte)0);
+    private Point point = new Point(0,0,(byte)8,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0);
     
     public Point pollFifo () {
     	return fifo.poll();
@@ -62,60 +62,80 @@ public class MyInputProcesor implements InputProcessor {
         	point.r = (byte)255;
         	point.g = (byte)255;
         	point.b = (byte)255;
+    		point.type = (byte)3;
+    		fifo.add(point);
         }
         else if (keycode == Keys.NUM_1)
         {
         	point.r = (byte)0;
         	point.g = (byte)0;
         	point.b = (byte)0;
+    		point.type = (byte)3;
+    		fifo.add(point);
         }
         else if (keycode == Keys.NUM_2)
         {
         	point.r = (byte)246;
         	point.g = (byte)215;
         	point.b = (byte)81;
+    		point.type = (byte)3;
+    		fifo.add(point);
         }
         else if (keycode == Keys.NUM_3)
         {
         	point.r = (byte)245;
         	point.g = (byte)110;
         	point.b = (byte)68;
+    		point.type = (byte)3;
+    		fifo.add(point);
         }
         else if (keycode == Keys.NUM_4)
         {
         	point.r = (byte)238;
         	point.g = (byte)97;
         	point.b = (byte)118;
+    		point.type = (byte)3;
+    		fifo.add(point);
         }
         else if (keycode == Keys.NUM_5)
         {
         	point.r = (byte)144;
         	point.g = (byte)67;
         	point.b = (byte)202;
+    		point.type = (byte)3;
+    		fifo.add(point);
         }
         else if (keycode == Keys.NUM_6)
         {
         	point.r = (byte)53;
         	point.g = (byte)168;
         	point.b = (byte)192;
+    		point.type = (byte)3;
+    		fifo.add(point);
         }
         else if (keycode == Keys.NUM_7)
         {
         	point.r = (byte)153;
         	point.g = (byte)201;
         	point.b = (byte)83;
+    		point.type = (byte)3;
+    		fifo.add(point);
         }
         else if (keycode == Keys.NUM_8)
         {
         	point.r = (byte)131;
         	point.g = (byte)144;
         	point.b = (byte)152;
+    		point.type = (byte)3;
+    		fifo.add(point);
         }
         else if (keycode == Keys.NUM_9)
         {
         	point.r = (byte)86;
         	point.g = (byte)132;
         	point.b = (byte)227;
+    		point.type = (byte)3;
+    		fifo.add(point);
         }
        
         return false;
@@ -129,8 +149,16 @@ public class MyInputProcesor implements InputProcessor {
 
     @Override
     public boolean keyTyped (char character) {
-    	if(character == '+' || character == '=') point.brush_size++;
-    	else if (character == '-') point.brush_size--;
+    	if(character == '+' || character == '=') {
+    		point.brush_size++;
+    		point.type = (byte)3;
+    		fifo.add(point);
+    	}
+    	else if (character == '-') {
+    		point.brush_size--;
+    		point.type = (byte)3;
+    		fifo.add(point);
+    	}
     	
     	return false;
     }
@@ -175,10 +203,7 @@ public class MyInputProcesor implements InputProcessor {
 
 	@Override
 	public boolean mouseMoved(int x, int y) {	
-		point.x = x;
-		point.y = y;
-		point.type = (byte)3;
-		fifo.add(point); 
+
 		return false;
 	}
 }
