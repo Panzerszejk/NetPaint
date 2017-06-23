@@ -16,9 +16,9 @@ public class ServerThread extends Thread{
     public byte[] receiveMsg = new byte[13];
     public byte[] sendMsg = new byte[13];
     public String IPv4 = new String();
-    public Point punktsend= new Point(0,0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0); 
+    public Point punktsend=new Point(0,0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0); 
     //kiedy dam null wywala nullpointerexception ??
-    public Point punktreceive= null;
+    public Point punktreceive=new Point(0,0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0);
 	byte[] byteX=new byte[4];
 	byte[] byteY=new byte[4];
 	

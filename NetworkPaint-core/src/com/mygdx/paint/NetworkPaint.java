@@ -156,9 +156,8 @@ public class NetworkPaint extends ApplicationAdapter {
 	@Override
 	public void dispose () {
 		batch.dispose();
-
-
 	}
+	
 	public void addShutdownHook(Thread hook){
 		server.server.dispose();
 		client.socket.dispose();
