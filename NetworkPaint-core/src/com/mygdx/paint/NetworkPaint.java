@@ -33,6 +33,7 @@ public class NetworkPaint extends ApplicationAdapter {
 	Point current;  //tablica pozycji obecnej
 	Point previous;	//tablica pozycji poprzedniej
 	Point received;
+	Point lastreceived;
 	public void set_kursor(byte rozmiar,byte r,byte g,byte b)
 	{
 		byte brushSizePow2=rozmiar;
@@ -107,10 +108,11 @@ public class NetworkPaint extends ApplicationAdapter {
 		}
 		if(ClientServerSelect.equals("C")) {
 			received=client.fifoclient.poll();
-			if(received!=null){
+			if(received!=null&&!received.equals(lastreceived)){
 				inputProcesor.addFifo(received);
 				System.out.println(received.x+"  "+received.y);
 			}
+			lastreceived=received;
 		}
 		
 		//Czyszczenie ekranu
