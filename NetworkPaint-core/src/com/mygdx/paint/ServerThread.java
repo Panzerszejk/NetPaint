@@ -62,15 +62,9 @@ public class ServerThread extends Thread{
         {
             if(socket != null)
             {
-<<<<<<< HEAD
-                try {
-					if (lastpunkt.x != punktsend.x && lastpunkt.y != punktsend.y){
-					
-=======
             	System.out.print("");
 				if (!lastpunkt.equal(punktsend)) {
 					try {
->>>>>>> 010e72f46ec0c604bb8f263fe45860b51a89170a
 						sendData(punktsend);
 						socket.getOutputStream().write(sendMsg);
 						lastpunkt.copy(punktsend);
