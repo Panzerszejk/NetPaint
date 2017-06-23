@@ -24,10 +24,11 @@ public class ServerThread extends Thread{
     public Point punktreceive=new Point(0,0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0);
 	byte[] byteX=new byte[4];
 	byte[] byteY=new byte[4];
-	private Point lastPunkt=new Point(0,0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0);
+	private Point lastpunkt=new Point(0,0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0);
 	
     public void sendData(Point current) throws IOException{
 		if(current!=null&&current.type!=0){
+			if (lastpunkt.x != current.x && lastpunkt.y != current.y) {
 				byte[] bytesX = new byte[] { (byte) (current.x >> 24), (byte) (current.x >> 16),
 						(byte) (current.x >> 8), (byte) current.x };
 				byte[] bytesY = new byte[] { (byte) (current.y >> 24), (byte) (current.y >> 16),
@@ -43,6 +44,9 @@ public class ServerThread extends Thread{
 				sendMsg[10] = current.r;
 				sendMsg[11] = current.g;
 				sendMsg[12] = current.b;
+				lastpunkt.copy(current);
+				socket.getOutputStream().write(sendMsg);
+			}
 		}
 	}
     
@@ -80,7 +84,6 @@ public class ServerThread extends Thread{
                 try {
     				System.out.println(punktsend.x+"  "+punktsend.y);
                 	sendData(punktsend);
-    				socket.getOutputStream().write(sendMsg);
                 	//chwilowo serwer tylko wysyla, do odbioru/wysylania potrzeba tokena
                     //socket.getInputStream().read(receiveMsg, 0, receiveMsg.length);
                 } catch (IOException e) {

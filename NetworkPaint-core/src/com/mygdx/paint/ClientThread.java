@@ -19,30 +19,28 @@ public class ClientThread extends Thread{
 	byte[] byteX=new byte[4];
 	byte[] byteY=new byte[4];
     public Queue<Point> fifoclient = new LinkedList<Point>();
-	
+	public Point lastpunkt= new Point(0,0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0);
+    
     public void sendData(Point current){
 		if(current!=null&&current.type!=0){
-		byte[] bytesX = new byte[] { 
-		        (byte)(current.x >> 24),
-		        (byte)(current.x >> 16),
-		        (byte)(current.x >> 8),
-		        (byte)current.x };
-		byte[] bytesY = new byte[] { 
-		        (byte)(current.y >> 24),
-		        (byte)(current.y >> 16),
-		        (byte)(current.y >> 8),
-		        (byte)current.y };
-		for(int i=0;i<4;i++){		//X to bytes
-			sendMsg[i]=bytesX[i];
-		}
-		for(int i=4;i<8;i++){		//Y to bytes
-			sendMsg[i]=bytesY[i-4];
-		}
-		sendMsg[8]=current.brush_size;
-		sendMsg[9]=current.type;
-		sendMsg[10]=current.r;
-		sendMsg[11]=current.g;
-		sendMsg[12]=current.b;
+			if (lastpunkt.x != current.x && lastpunkt.y != current.y) {
+				byte[] bytesX = new byte[] { (byte) (current.x >> 24), (byte) (current.x >> 16),
+						(byte) (current.x >> 8), (byte) current.x };
+				byte[] bytesY = new byte[] { (byte) (current.y >> 24), (byte) (current.y >> 16),
+						(byte) (current.y >> 8), (byte) current.y };
+				for (int i = 0; i < 4; i++) { // X to bytes
+					sendMsg[i] = bytesX[i];
+				}
+				for (int i = 4; i < 8; i++) { // Y to bytes
+					sendMsg[i] = bytesY[i - 4];
+				}
+				sendMsg[8] = current.brush_size;
+				sendMsg[9] = current.type;
+				sendMsg[10] = current.r;
+				sendMsg[11] = current.g;
+				sendMsg[12] = current.b;
+				lastpunkt.copy(current);
+			}
 		}
 	}
     
@@ -78,7 +76,7 @@ public class ClientThread extends Thread{
                 try {
                 	//chwilowo klient tylko czyta, do odbioru/czytania potrzeba tokena
                     //socket.getOutputStream().write(sendMsg); // wiadomosc wysylana
-                    socket.getInputStream().read(receiveMsg, 0, 13); //odebrana od servera
+                    socket.getInputStream().read(receiveMsg, 0, receiveMsg.length); //odebrana od servera
                 	receiveData();
                 } catch (IOException e) {
                     e.printStackTrace();
