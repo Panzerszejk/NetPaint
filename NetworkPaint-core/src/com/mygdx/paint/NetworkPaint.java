@@ -109,6 +109,7 @@ public class NetworkPaint extends ApplicationAdapter {
 			received=client.fifoclient.poll();
 			if(received!=null){
 				inputProcesor.addFifo(received);
+				System.out.println(received.x+"  "+received.y);
 			}
 		}
 		

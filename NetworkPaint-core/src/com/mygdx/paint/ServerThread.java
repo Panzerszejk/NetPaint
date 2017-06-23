@@ -24,7 +24,7 @@ public class ServerThread extends Thread{
     public Point punktreceive=new Point(0,0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0);
 	byte[] byteX=new byte[4];
 	byte[] byteY=new byte[4];
-
+	private Point lastPunkt=new Point(0,0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0);
 	
     public void sendData(Point current) throws IOException{
 		if(current!=null&&current.type!=0){
