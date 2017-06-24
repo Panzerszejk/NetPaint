@@ -80,6 +80,7 @@ public class NetworkPaint extends ApplicationAdapter {
 
 		shapeRenderer.setProjectionMatrix(camera.combined);
 		batch = new SpriteBatch();
+		
 		temp = null;
 		current[0] = null;
 		previous[0] = null;
@@ -166,9 +167,8 @@ public class NetworkPaint extends ApplicationAdapter {
 						shapeRenderer.end();
 					}
 					if(current[i].type==5){
-						Shape bob = new Point(previous[i].x, previous[i].y, previous[i].brush_size, previous[i].type, previous[i].r, previous[i].g, previous[i].b,previous[i].id);
-						bob.draw(shapeRenderer, buffer[i].x, height - buffer[i].y,height);
-						bob.draw(shapeRenderer,current[i].x, height -current[i].y,height);
+						Shape bob = new Point(current[i].x, current[i].y, current[i].brush_size, current[i].type, current[i].r, current[i].g, current[i].b,current[i].id);
+						bob.draw(shapeRenderer,previous[i].x,height-previous[i].y,height);
 						Shape bob1 = new Rect(current[i].x, current[i].y, current[i].brush_size, current[i].type, current[i].r, current[i].g, current[i].b,current[i].id);
 						bob1.draw(shapeRenderer, 20, 20, height);
 					}
