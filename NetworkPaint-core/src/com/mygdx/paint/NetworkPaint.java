@@ -30,13 +30,17 @@ public class NetworkPaint extends ApplicationAdapter {
 	public String ClientIP;
 	public String ServerIP;
 	
+	long startTime = System.currentTimeMillis();
+	long fifoTime = System.currentTimeMillis();
+	long netTime = System.currentTimeMillis();
+	long screenTime = System.currentTimeMillis();
+	long drawTime = System.currentTimeMillis();
+	long endTime = System.currentTimeMillis();
 	ClientThread client=ClientThread.get();
 	ServerThread server=ServerThread.get(); 
 	Point temp;
-	Point current0;  //tablica pozycji obecnej
-	Point previous0;	//tablica pozycji poprzedniej
-	Point current1;
-	Point previous1;
+	Point[] current = new Point[2];  //tablica pozycji obecnej
+	Point[] previous = new Point[2];	//tablica pozycji poprzedniej
 	Point received=new Point(0,0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0);
 	Point lastreceived=new Point(0,0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0);
 	public void set_kursor(byte rozmiar,byte r,byte g,byte b)
@@ -78,10 +82,10 @@ public class NetworkPaint extends ApplicationAdapter {
 		batch = new SpriteBatch();
 		
 		temp = null;
-		current0 = null;
-		previous0 = null;
-		current1 = null;
-		previous1 = null;
+		current[0] = null;
+		previous[0] = null;
+		current[1] = null;
+		previous[1] = null;
 		
 		//obliczanie najblizszej wiekszej potegi 2. Kod ze stacka :D
 		
@@ -101,36 +105,39 @@ public class NetworkPaint extends ApplicationAdapter {
 
 	@Override
 	public void render () {
-
+		startTime = System.currentTimeMillis();
+		//System.out.println("resetTime: "+(startTime-endTime));
 		temp=inputProcesor.pollFifo();  //Metoda zdejmuje ostatni element z listy fifo. Jesli elementow nie ma zwraca null
+		fifoTime = System.currentTimeMillis();
+		System.out.println("local: "+inputProcesor.getSizeFifo());
 		if(temp != null){
-		switch(temp.id){
-		case (byte)0:{
-			current0 = temp;
-			current1 = null;
-			break;
-		}
-		case (byte)1:{
-			current1 = temp;
-			current0 = null;
-			break;
-		}
-		default:{
-			current0 = null;
-			current1 = null;
-		}
-		}
+			switch(temp.id){
+			case (byte)0:{
+				current[0] = temp;
+				current[1] = null;
+				break;
+			}
+			case (byte)1:{
+				current[1] = temp;
+				current[0] = null;
+				break;
+			}
+			default:{
+				current[0] = null;
+				current[1] = null;
+			}
+			}
 		}
 		if(ClientServerSelect.equals("online")) {
-			if(current0!=null) {
-				server.punktsend.copy(current0);
+			if(current[0]!=null) {
+				server.punktsend.copy(current[0]);
 			}
 			received=client.fifoclient.poll();
 			if(received!=null){
 				inputProcesor.addFifo(received);
 			}
 		}
-		
+		netTime = System.currentTimeMillis();
 		//Czyszczenie ekranu
 		Gdx.gl.glClearColor(1f, 1f, 1f, 1f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
@@ -144,70 +151,41 @@ public class NetworkPaint extends ApplicationAdapter {
 		batch.end();
 		texture.getTexture().dispose();
 		sprite.getTexture().dispose();
-		if(current0 != null){ //Musimy sprawdzic czy przypadkiem PosTab nie jest pusty(null) bo inaczej wywali nam NullPointerException
-			set_kursor(current0.brush_size,current0.r,current0.g,current0.b);
-			if(previous0 != null){ //Sprawdzenie, czy nie jest to pierwszy punkt
-				if(current0.type == 2&&previous0.type!=0 ){ //Jesli mysz jest przeciagana
-					camera.update();
-					
-					current0.draw(shapeRenderer,previous0.x,height-previous0.y,height);
+		screenTime = System.currentTimeMillis();
+		if(current[0] != null) set_kursor(current[0].brush_size,current[0].r,current[0].g,current[0].b);
+		for(int i = 0; i < 2; i++){
+			if(current[i] != null){ //Musimy sprawdzic czy przypadkiem PosTab nie jest pusty(null) bo inaczej wywali nam NullPointerException
+				if(previous[i] != null){ //Sprawdzenie, czy nie jest to pierwszy punkt
+					if(current[i].type == 2&&previous[i].type!=0 ){ //Jesli mysz jest przeciagana
+						camera.update();
+						current[i].draw(shapeRenderer,previous[i].x,height-previous[i].y,height);
+					}
+					if(previous[i].type == 1){ //Jesli przycisk myszy klikniety
+						camera.update();
+						shapeRenderer.begin(ShapeType.Filled);
+						shapeRenderer.setColor((current[i].r & 0xff)/255f, (current[i].g & 0xff)/255f, (current[i].b & 0xff)/255f, 1f);
+						shapeRenderer.circle(current[i].x,height-current[i].y,current[i].brush_size/2); //Rysuj pojedynczy punkt
+						shapeRenderer.end();
+					}
+					if(current[i].type==5){
+						Shape bob = new Point(current[i].x, current[i].y, current[i].brush_size, current[i].type, current[i].r, current[i].g, current[i].b,current[i].id);
+						bob.draw(shapeRenderer,previous[i].x,height-previous[i].y,height);
+						Shape bob1 = new Rect(current[i].x, current[i].y, current[i].brush_size, current[i].type, current[i].r, current[i].g, current[i].b,current[i].id);
+						bob1.draw(shapeRenderer, 20, 20, height);
+					}
+					if(!previous.equals(current)){
+						previous[i].copy(current[i]);
+					}
 				}
-				if(previous0.type == 1){ //Jesli przycisk myszy klikniety
-					camera.update();
-					shapeRenderer.begin(ShapeType.Filled);
-					shapeRenderer.setColor((current0.r & 0xff)/255f, (current0.g & 0xff)/255f, (current0.b & 0xff)/255f, 1f);
-					shapeRenderer.circle(current0.x,height-current0.y,current0.brush_size/2); //Rysuj pojedynczy punkt
-					shapeRenderer.end();
-				}
-				if(current0.type==5){
-					Shape bob = new Point(current0.x, current0.y, current0.brush_size, current0.type, current0.r, current0.g, current0.b,current0.id);
-					bob.draw(shapeRenderer,previous0.x,height-previous0.y,height);
-					Shape bob1 = new Rect(current0.x, current0.y, current0.brush_size, current0.type, current0.r, current0.g, current0.b,current0.id);
-					bob1.draw(shapeRenderer, 20, 20, height);
-				}
+				else{
+					previous[i] = new Point(current[i]); //Jesli LastTab jest null, to stworz nowy
+				}			
 			}
-			else{
-				previous0 = new Point(current0); //Jesli LastTab jest null, to stworz nowy
-			
-		
-			}
-			previous0.copy(current0);  //Przepisuje punkt za kazdym razem, zeby uniknac problemow z nullem
-			
 		}
-		
-		if(current1 != null){ //Musimy sprawdzic czy przypadkiem PosTab nie jest pusty(null) bo inaczej wywali nam NullPointerException
-			if(previous1 != null){ //Sprawdzenie, czy nie jest to pierwszy punkt
-				if(current1.type == 2&&previous1.type!=0 ){ //Jesli mysz jest przeciagana
-					camera.update();
-					int x1, x2, y1, y2;
-					x1 = previous1.x;
-					x2 = current1.x;
-					y1 = height - previous1.y;
-					y2 = height - current1.y;
-					shapeRenderer.begin(ShapeType.Filled);
-					shapeRenderer.setColor((current1.r & 0xff)/255f, (current1.g & 0xff)/255f, (current1.b & 0xff)/255f, 1f);
-					
-					shapeRenderer.circle(x1,y1,current1.brush_size/2);
-					shapeRenderer.rectLine(x1,y1,x2,y2,current1.brush_size); //Rysujemy "zaokralona" linie
-					shapeRenderer.circle(x2,y2,current1.brush_size/2);
-					shapeRenderer.end();
-				}
-				if(previous1.type == 1){ //Jesli przycisk myszy klikniety
-					camera.update();
-					shapeRenderer.begin(ShapeType.Filled);
-					shapeRenderer.setColor((current1.r & 0xff)/255f, (current1.g & 0xff)/255f, (current1.b & 0xff)/255f, 1f);
-					shapeRenderer.circle(current1.x,height-current1.y,current1.brush_size/2); //Rysuj pojedynczy punkt
-					shapeRenderer.end();
-				}
-			}
-			else{
-				previous1 = new Point(current1); //Jesli LastTab jest null, to stworz nowy
-			
-		
-			}
-			previous1.copy(current1);  //Przepisuje punkt za kazdym razem, zeby uniknac problemow z nullem
-		}
+		drawTime = System.currentTimeMillis();
 		texture=ScreenUtils.getFrameBufferTexture(); //Pobieramy bufor ekranu do tekstury
+		endTime = System.currentTimeMillis();
+		//System.out.println("fifoTime:"+" "+(fifoTime-startTime)+" "+"netTime:"+" "+(netTime-fifoTime)+" "+"screenTime:"+" "+(screenTime-netTime)+" "+"drawTime:"+" "+(drawTime-screenTime)+" "+"endTime:"+" "+(endTime-drawTime));
 	}
 
 

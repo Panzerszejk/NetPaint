@@ -13,15 +13,10 @@ public class ClientThread extends Thread{
     Socket socket;
     static ClientThread instance;
     public byte[] receiveMsg = new byte[13];
-    public byte[] sendMsg = new byte[13];
     public String IPv4 = new String();
-    public Point punktsend=new Point(0,0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)1);
-    public Point punktreceive=new Point(0,0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)1);
 	byte[] byteX=new byte[4];
 	byte[] byteY=new byte[4];
-    public Queue<Point> fifoclient = new LinkedList<Point>();
-	public Point lastpunkt= new Point(0,0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)1);
-    
+    public Queue<Point> fifoclient = new LinkedList<Point>();    
     public static ClientThread get() {
         if (instance == null) instance = new ClientThread();
         return instance;
@@ -46,29 +41,30 @@ public class ClientThread extends Thread{
 			Point punkt=new Point(x, y, s, t, r, g, b,(byte)1);
 			if(punkt.x<800&&punkt.x>0&&punkt.y<600&&punkt.y>0)
 				fifoclient.add(punkt);
-			System.out.println(punkt.x+" "+punkt.y);
-			System.out.println("Size: "+fifoclient.size());
+			System.out.println("client: "+fifoclient.size());
 		}
 	}
     
     public void run(){
+    	boolean wait=true;
         SocketHints hints = new SocketHints();
         hints.connectTimeout = 10000;
         hints.tcpNoDelay = false;
         hints.trafficClass = 0x22;
-        try {
-           socket = Gdx.net.newClientSocket(Protocol.TCP, IPv4 , 11830, hints );
-           Thread.sleep(2000, 0);
-           } catch (Exception e) {
-         	   e.printStackTrace();
-           }
+		while (wait) {
+	        try {
+	        	wait=false;
+	            socket = Gdx.net.newClientSocket(Protocol.TCP, IPv4 , 11830, hints );
+	            } catch (Exception e) {
+	          	   wait=true;
+	            }
+		}
+
 		while(true)
         {
             if(socket!=null)
             {
                 try {
-                	//chwilowo klient tylko czyta, do odbioru/czytania potrzeba tokena
-                    //socket.getOutputStream().write(sendMsg); // wiadomosc wysylana
                     socket.getInputStream().read(receiveMsg, 0, receiveMsg.length); //odebrana od server
                     receiveData();
                 } catch (IOException e) {
