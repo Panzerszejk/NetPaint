@@ -3,15 +3,15 @@ package com.mygdx.paint;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+//import com.badlogic.gdx.graphics.GL20;
+//import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.g2d.Sprite;
+//import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.utils.ScreenUtils;
+//import com.badlogic.gdx.utils.ScreenUtils;
 
 
 public class NetworkPaint extends ApplicationAdapter {
@@ -23,8 +23,8 @@ public class NetworkPaint extends ApplicationAdapter {
 	byte brushSize;
 	public MyInputProcesor inputProcesor;
 	private SpriteBatch batch;
-	private TextureRegion texture;
-	private Sprite sprite;
+	//private TextureRegion texture;
+	//private Sprite sprite;
 	
 	public String ClientServerSelect;
 	public String ClientIP;
@@ -47,7 +47,7 @@ public class NetworkPaint extends ApplicationAdapter {
 		brushSizePow2 |= brushSizePow2 >> 4; //zaokraglenie dziala do 4 bitow + 1. Jak bedziemy robic wieksza wielkosc pedzla niz 32 to trzeba bedzie dodac jeszcze jedna linijke
 		brushSizePow2++;
 
-		if(brushSizePow2<16) //rozmiar kursora w �indo�sie musi by� wiekszy od 16 
+		if(brushSizePow2<16) //rozmiar kursora w windowsie musi byc wiekszy od 16 
 			brushSizePow2=16;
 			
 		Pixmap pm = new Pixmap(brushSizePow2,brushSizePow2,Pixmap.Format.RGBA8888); //rozmiar kursora musi byc potega 2
@@ -87,7 +87,7 @@ public class NetworkPaint extends ApplicationAdapter {
 		Gdx.input.setInputProcessor(inputProcesor);	//ustawienie procesora wejsc na ten z MyInputProcessor
 		set_kursor(inputProcesor.get_brush_size(),inputProcesor.get_r(),inputProcesor.get_g(),inputProcesor.get_b()); //wywolanie funkcji obslugujacej zmiane kursora
 		
-		texture=ScreenUtils.getFrameBufferTexture(); //sciagam teksture na wstepie zeby nie wywalilo nam NullPointerException przy pierwszym rysowaniu
+		//texture=ScreenUtils.getFrameBufferTexture(); //sciagam teksture na wstepie zeby nie wywalilo nam NullPointerException przy pierwszym rysowaniu
 		if(ClientServerSelect.equals("online")){  //wybor klient/serwer
 			client.IPv4=ClientIP;
 			client.start();
