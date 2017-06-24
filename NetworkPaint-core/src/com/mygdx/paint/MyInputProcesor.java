@@ -202,10 +202,13 @@ public class MyInputProcesor implements InputProcessor {
 
     @Override
     public boolean touchDragged (int x, int y, int pointer) {
-    	point.x = x;
-		point.y = y;
-		point.type = (byte)2;
-		fifo.add(point);
+    	if(x!=point.x&&y!=point.y&&point.type!=(byte)2)
+    	{
+    		point.x = x;
+			point.y = y;
+			point.type = (byte)2;
+			fifo.add(point);
+    	}
     	return false;
     }
 
