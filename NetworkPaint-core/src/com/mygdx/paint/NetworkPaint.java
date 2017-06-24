@@ -30,12 +30,17 @@ public class NetworkPaint extends ApplicationAdapter {
 	public String ClientIP;
 	public String ServerIP;
 	
+	long startTime = System.currentTimeMillis();
+	long fifoTime = System.currentTimeMillis();
+	long netTime = System.currentTimeMillis();
+	long screenTime = System.currentTimeMillis();
+	long drawTime = System.currentTimeMillis();
+	long endTime = System.currentTimeMillis();
 	ClientThread client=ClientThread.get();
 	ServerThread server=ServerThread.get(); 
 	Point temp;
 	Point[] current = new Point[2];  //tablica pozycji obecnej
 	Point[] previous = new Point[2];	//tablica pozycji poprzedniej
-	Point[] buffer = new Point[2];
 	Point received=new Point(0,0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0);
 	Point lastreceived=new Point(0,0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0);
 	public void set_kursor(byte rozmiar,byte r,byte g,byte b)
@@ -71,14 +76,15 @@ public class NetworkPaint extends ApplicationAdapter {
 
 		Gdx.graphics.setContinuousRendering(true); //wylacza ciagle renderowanie. Renderuje gdy pojawi sie jakis event
 		//zmienic na true, przy last wersji!!!
+		
+
 		shapeRenderer.setProjectionMatrix(camera.combined);
 		batch = new SpriteBatch();
 		temp = null;
-		for(int i = 0; i < 2; i++){
-			buffer[i] = null;
-			current[i] = null;
-			previous[i] = null;
-		}
+		current[0] = null;
+		previous[0] = null;
+		current[1] = null;
+		previous[1] = null;
 		
 		//obliczanie najblizszej wiekszej potegi 2. Kod ze stacka :D
 		
@@ -98,8 +104,10 @@ public class NetworkPaint extends ApplicationAdapter {
 
 	@Override
 	public void render () {
-		System.out.println(Gdx.graphics.getFramesPerSecond());
+		startTime = System.currentTimeMillis();
+		System.out.println("resetTime: "+(startTime-endTime));
 		temp=inputProcesor.pollFifo();  //Metoda zdejmuje ostatni element z listy fifo. Jesli elementow nie ma zwraca null
+		fifoTime = System.currentTimeMillis();
 		if(temp != null){
 			switch(temp.id){
 			case (byte)0:{
@@ -127,27 +135,25 @@ public class NetworkPaint extends ApplicationAdapter {
 				inputProcesor.addFifo(received);
 			}
 		}
+		netTime = System.currentTimeMillis();
 		//Czyszczenie ekranu
-		//Gdx.gl.glClearColor(1f, 1f, 1f, 1f);
-		//Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+		Gdx.gl.glClearColor(1f, 1f, 1f, 1f);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
 		//Rysujemy w kazdej iteracji to co mamy w teksturze
-		//sprite = new Sprite(texture);
-		//batch.begin();
-		//batch.setBlendFunction(GL20.GL_ONE,GL20.GL_ONE_MINUS_SRC_ALPHA); //Zmiana metod laczenia obrazu, zeby nie przyciemnialo kolorow
+		sprite = new Sprite(texture);
+		batch.begin();
+		batch.setBlendFunction(GL20.GL_ONE,GL20.GL_ONE_MINUS_SRC_ALPHA); //Zmiana metod laczenia obrazu, zeby nie przyciemnialo kolorow
 		//batch.setColor(190/255f, 190/255f, 190/255f, 0f);
-		//sprite.draw(batch);
-		//batch.end();
-		//texture.getTexture().dispose();
-		//sprite.getTexture().dispose();
+		sprite.draw(batch);
+		batch.end();
+		texture.getTexture().dispose();
+		sprite.getTexture().dispose();
+		screenTime = System.currentTimeMillis();
 		for(int i = 0; i < 2; i++){
 			if(current[i] != null){ //Musimy sprawdzic czy przypadkiem PosTab nie jest pusty(null) bo inaczej wywali nam NullPointerException
 				set_kursor(current[i].brush_size,current[i].r,current[i].g,current[i].b);
 				if(previous[i] != null){ //Sprawdzenie, czy nie jest to pierwszy punkt
-					if(buffer[i] != null&&buffer[i].type==2&&previous[i].type!=0){
-						camera.update();
-						buffer[i].draw(shapeRenderer, previous[i].x, height-previous[i].y, height);
-					}
 					if(current[i].type == 2&&previous[i].type!=0 ){ //Jesli mysz jest przeciagana
 						camera.update();
 						current[i].draw(shapeRenderer,previous[i].x,height-previous[i].y,height);
@@ -167,17 +173,18 @@ public class NetworkPaint extends ApplicationAdapter {
 						bob1.draw(shapeRenderer, 20, 20, height);
 					}
 					if(!previous.equals(current)){
-						buffer[i].copy(previous[i]);
 						previous[i].copy(current[i]);
 					}
 				}
 				else{
 					previous[i] = new Point(current[i]); //Jesli LastTab jest null, to stworz nowy
-					buffer[i] = new Point(previous[i]);
 				}			
 			}
 		}
-		//texture=ScreenUtils.getFrameBufferTexture(); //Pobieramy bufor ekranu do tekstury
+		drawTime = System.currentTimeMillis();
+		texture=ScreenUtils.getFrameBufferTexture(); //Pobieramy bufor ekranu do tekstury
+		endTime = System.currentTimeMillis();
+		System.out.println("fifoTime:"+" "+(fifoTime-startTime)+" "+"netTime:"+" "+(netTime-fifoTime)+" "+"screenTime:"+" "+(screenTime-netTime)+" "+"drawTime:"+" "+(drawTime-screenTime)+" "+"endTime:"+" "+(endTime-drawTime));
 	}
 
 
