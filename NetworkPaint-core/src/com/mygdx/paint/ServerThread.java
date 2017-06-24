@@ -16,12 +16,9 @@ public class ServerThread extends Thread{
     ServerSocket server;
     Socket socket;
     static ServerThread instance;
-    public byte[] receiveMsg = new byte[13];
     public byte[] sendMsg = new byte[13];
     public String IPv4 = new String();
     public Point punktsend=new Point(0,0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0); 
-    //kiedy dam null wywala nullpointerexception ??
-    public Point punktreceive=new Point(0,0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0);
 	byte[] byteX=new byte[4];
 	byte[] byteY=new byte[4];
 	private Point lastpunkt=new Point(0,0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0);
@@ -62,7 +59,7 @@ public class ServerThread extends Thread{
             socketHints.trafficClass = 0x22;
     		server = Gdx.net.newServerSocket(Protocol.TCP, IPv4 , 11830, hints);   
     		socket  = server.accept(socketHints);
-    		Thread.sleep(2000);
+    		Thread.sleep(500);
         } catch (Exception e) {
      	   e.printStackTrace();
         }
@@ -76,9 +73,6 @@ public class ServerThread extends Thread{
 						sendData(punktsend);
 						socket.getOutputStream().write(sendMsg);
 						lastpunkt.copy(punktsend);
-						// chwilowo serwer tylko wysyla, do odbioru/wysylania
-						// potrzeba tokena
-						// socket.getInputStream().read(receiveMsg, 0,receiveMsg.length);
 					} catch (IOException e) {
 						e.printStackTrace();
 						server.dispose();

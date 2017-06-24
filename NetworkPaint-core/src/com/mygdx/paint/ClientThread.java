@@ -13,10 +13,7 @@ public class ClientThread extends Thread{
     Socket socket;
     static ClientThread instance;
     public byte[] receiveMsg = new byte[13];
-    public byte[] sendMsg = new byte[13];
     public String IPv4 = new String();
-    public Point punktsend=new Point(0,0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)1);
-    public Point punktreceive=new Point(0,0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)1);
 	byte[] byteX=new byte[4];
 	byte[] byteY=new byte[4];
     public Queue<Point> fifoclient = new LinkedList<Point>();
@@ -67,8 +64,6 @@ public class ClientThread extends Thread{
             if(socket!=null)
             {
                 try {
-                	//chwilowo klient tylko czyta, do odbioru/czytania potrzeba tokena
-                    //socket.getOutputStream().write(sendMsg); // wiadomosc wysylana
                     socket.getInputStream().read(receiveMsg, 0, receiveMsg.length); //odebrana od server
                     receiveData();
                 } catch (IOException e) {
