@@ -12,8 +12,8 @@ import com.badlogic.gdx.net.SocketHints;
 public class ClientThread extends Thread{
     Socket socket;
     static ClientThread instance;
-    public byte[] receiveMsg = new byte[14];
-    public byte[] sendMsg = new byte[14];
+    public byte[] receiveMsg = new byte[13];
+    public byte[] sendMsg = new byte[13];
     public String IPv4 = new String();
     public Point punktsend=new Point(0,0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)1);
     public Point punktreceive=new Point(0,0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)1);
@@ -43,8 +43,7 @@ public class ClientThread extends Thread{
 			byte r=receiveMsg[10];
 			byte g=receiveMsg[11];
 			byte b=receiveMsg[12];
-			byte id=(byte)1;
-			Point punkt=new Point(x, y, s, t, r, g, b,id);
+			Point punkt=new Point(x, y, s, t, r, g, b,(byte)1);
 			if(punkt.x<800&&punkt.x>0&&punkt.y<600&&punkt.y>0)
 				fifoclient.add(punkt);
 			System.out.println(punkt.x+" "+punkt.y);
@@ -56,10 +55,10 @@ public class ClientThread extends Thread{
         SocketHints hints = new SocketHints();
         hints.connectTimeout = 10000;
         hints.tcpNoDelay = false;
-        hints.trafficClass = 0x14;
+        hints.trafficClass = 0x22;
         try {
-           socket = Gdx.net.newClientSocket(Protocol.TCP, IPv4 , 11564, hints );
-           Thread.sleep(500, 0);
+           socket = Gdx.net.newClientSocket(Protocol.TCP, IPv4 , 11830, hints );
+           Thread.sleep(2000, 0);
            } catch (Exception e) {
          	   e.printStackTrace();
            }
@@ -70,7 +69,7 @@ public class ClientThread extends Thread{
                 try {
                 	//chwilowo klient tylko czyta, do odbioru/czytania potrzeba tokena
                     //socket.getOutputStream().write(sendMsg); // wiadomosc wysylana
-                    socket.getInputStream().read(receiveMsg, 0, receiveMsg.length); //odebrana od servera
+                    socket.getInputStream().read(receiveMsg, 0, receiveMsg.length); //odebrana od server
                     receiveData();
                 } catch (IOException e) {
                     e.printStackTrace();
