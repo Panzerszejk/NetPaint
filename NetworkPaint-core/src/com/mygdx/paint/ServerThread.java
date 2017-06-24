@@ -53,16 +53,19 @@ public class ServerThread extends Thread{
 	
     public void run()
     {
-    	try{
-    		hints.acceptTimeout=10000;
-            socketHints.tcpNoDelay = false;
-            socketHints.trafficClass = 0x22;
-    		server = Gdx.net.newServerSocket(Protocol.TCP, IPv4 , 11830, hints);   
-    		socket  = server.accept(socketHints);
-    		Thread.sleep(500);
-        } catch (Exception e) {
-     	   e.printStackTrace();
-        }
+    	boolean wait=true;
+		hints.acceptTimeout=10000;
+        socketHints.tcpNoDelay = false;
+        socketHints.trafficClass = 0x22;
+		server = Gdx.net.newServerSocket(Protocol.TCP, IPv4 , 11830, hints);   
+		while (wait) {
+			try {
+				wait=false;
+				socket = server.accept(socketHints);
+			} catch (Exception e) {
+				wait=true;
+			}
+		}
 		while(true)
         {
             if(socket != null)

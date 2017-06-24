@@ -106,7 +106,7 @@ public class NetworkPaint extends ApplicationAdapter {
 	@Override
 	public void render () {
 		startTime = System.currentTimeMillis();
-		System.out.println("resetTime: "+(startTime-endTime));
+		//System.out.println("resetTime: "+(startTime-endTime));
 		temp=inputProcesor.pollFifo();  //Metoda zdejmuje ostatni element z listy fifo. Jesli elementow nie ma zwraca null
 		fifoTime = System.currentTimeMillis();
 		if(temp != null){
@@ -184,7 +184,7 @@ public class NetworkPaint extends ApplicationAdapter {
 		drawTime = System.currentTimeMillis();
 		texture=ScreenUtils.getFrameBufferTexture(); //Pobieramy bufor ekranu do tekstury
 		endTime = System.currentTimeMillis();
-		System.out.println("fifoTime:"+" "+(fifoTime-startTime)+" "+"netTime:"+" "+(netTime-fifoTime)+" "+"screenTime:"+" "+(screenTime-netTime)+" "+"drawTime:"+" "+(drawTime-screenTime)+" "+"endTime:"+" "+(endTime-drawTime));
+		//System.out.println("fifoTime:"+" "+(fifoTime-startTime)+" "+"netTime:"+" "+(netTime-fifoTime)+" "+"screenTime:"+" "+(screenTime-netTime)+" "+"drawTime:"+" "+(drawTime-screenTime)+" "+"endTime:"+" "+(endTime-drawTime));
 	}
 
 

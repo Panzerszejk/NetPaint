@@ -16,9 +16,7 @@ public class ClientThread extends Thread{
     public String IPv4 = new String();
 	byte[] byteX=new byte[4];
 	byte[] byteY=new byte[4];
-    public Queue<Point> fifoclient = new LinkedList<Point>();
-	public Point lastpunkt= new Point(0,0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)0,(byte)1);
-    
+    public Queue<Point> fifoclient = new LinkedList<Point>();    
     public static ClientThread get() {
         if (instance == null) instance = new ClientThread();
         return instance;
@@ -49,16 +47,20 @@ public class ClientThread extends Thread{
 	}
     
     public void run(){
+    	boolean wait=true;
         SocketHints hints = new SocketHints();
         hints.connectTimeout = 10000;
         hints.tcpNoDelay = false;
         hints.trafficClass = 0x22;
-        try {
-           socket = Gdx.net.newClientSocket(Protocol.TCP, IPv4 , 11830, hints );
-           Thread.sleep(2000, 0);
-           } catch (Exception e) {
-         	   e.printStackTrace();
-           }
+		while (wait) {
+	        try {
+	        	wait=false;
+	            socket = Gdx.net.newClientSocket(Protocol.TCP, IPv4 , 11830, hints );
+	            } catch (Exception e) {
+	          	   wait=true;
+	            }
+		}
+
 		while(true)
         {
             if(socket!=null)
