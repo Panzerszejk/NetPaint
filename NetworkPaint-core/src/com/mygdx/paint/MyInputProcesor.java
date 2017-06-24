@@ -21,6 +21,10 @@ public class MyInputProcesor implements InputProcessor {
     	fifo.add(object);
     }
     
+    public int getSizeFifo(){
+    	return fifo.size();
+    }
+    
     public byte get_r()
     {
     	return point.r;

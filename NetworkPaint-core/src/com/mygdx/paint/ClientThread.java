@@ -41,8 +41,7 @@ public class ClientThread extends Thread{
 			Point punkt=new Point(x, y, s, t, r, g, b,(byte)1);
 			if(punkt.x<800&&punkt.x>0&&punkt.y<600&&punkt.y>0)
 				fifoclient.add(punkt);
-			System.out.println(punkt.x+" "+punkt.y);
-			System.out.println("Size: "+fifoclient.size());
+			System.out.println("client: "+fifoclient.size());
 		}
 	}
     

@@ -109,6 +109,7 @@ public class NetworkPaint extends ApplicationAdapter {
 		//System.out.println("resetTime: "+(startTime-endTime));
 		temp=inputProcesor.pollFifo();  //Metoda zdejmuje ostatni element z listy fifo. Jesli elementow nie ma zwraca null
 		fifoTime = System.currentTimeMillis();
+		System.out.println("local: "+inputProcesor.getSizeFifo());
 		if(temp != null){
 			switch(temp.id){
 			case (byte)0:{
