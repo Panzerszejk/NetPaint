@@ -151,7 +151,7 @@ public class NetworkPaint extends ApplicationAdapter {
 		batch.end();
 		texture.getTexture().dispose();
 		sprite.getTexture().dispose();
-		screenTime = System.currentTimeMillis();
+    
 		if(current[0] != null) set_kursor(current[0].brush_size,current[0].r,current[0].g,current[0].b);
 		for(int i = 0; i < 2; i++){
 			if(current[i] != null){ //Musimy sprawdzic czy przypadkiem PosTab nie jest pusty(null) bo inaczej wywali nam NullPointerException
@@ -168,14 +168,15 @@ public class NetworkPaint extends ApplicationAdapter {
 						shapeRenderer.end();
 					}
 					if(current[i].type==5){
-						Shape bob = new Point(current[i].x, current[i].y, current[i].brush_size, current[i].type, current[i].r, current[i].g, current[i].b,current[i].id);
-						bob.draw(shapeRenderer,previous[i].x,height-previous[i].y,height);
-						Shape bob1 = new Rect(current[i].x, current[i].y, current[i].brush_size, current[i].type, current[i].r, current[i].g, current[i].b,current[i].id);
-						bob1.draw(shapeRenderer, 20, 20, height);
+					  ShapeControler bob = new ShapeControler(0,current0.x, current0.y, current0.brush_size, current0.type, current0.r, current0.g, current0.b,current0.id);
+					  bob.draw(shapeRenderer,previous0.x,height-previous0.y,height);
+					  ShapeControler bob1 = new ShapeControler(1,current0.x, current0.y, current0.brush_size, current0.type, current0.r, current0.g, current0.b,current0.id);
+					  bob1.draw(shapeRenderer, 20, 20, height);
 					}
 					if(!previous.equals(current)){
 						previous[i].copy(current[i]);
 					}
+
 				}
 				else{
 					previous[i] = new Point(current[i]); //Jesli LastTab jest null, to stworz nowy
