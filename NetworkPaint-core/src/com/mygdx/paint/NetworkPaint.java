@@ -153,7 +153,7 @@ public class NetworkPaint extends ApplicationAdapter {
 		screenTime = System.currentTimeMillis();
 		for(int i = 0; i < 2; i++){
 			if(current[i] != null){ //Musimy sprawdzic czy przypadkiem PosTab nie jest pusty(null) bo inaczej wywali nam NullPointerException
-				set_kursor(current[i].brush_size,current[i].r,current[i].g,current[i].b);
+				set_kursor(current[0].brush_size,current[0].r,current[0].g,current[0].b);
 				if(previous[i] != null){ //Sprawdzenie, czy nie jest to pierwszy punkt
 					if(current[i].type == 2&&previous[i].type!=0 ){ //Jesli mysz jest przeciagana
 						camera.update();
