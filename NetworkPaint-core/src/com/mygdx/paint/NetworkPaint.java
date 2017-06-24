@@ -160,9 +160,9 @@ public class NetworkPaint extends ApplicationAdapter {
 					shapeRenderer.end();
 				}
 				if(current0.type==5){
-					Shape bob = new Point(current0.x, current0.y, current0.brush_size, current0.type, current0.r, current0.g, current0.b,current0.id);
+					ShapeControler bob = new ShapeControler(0,current0.x, current0.y, current0.brush_size, current0.type, current0.r, current0.g, current0.b,current0.id);
 					bob.draw(shapeRenderer,previous0.x,height-previous0.y,height);
-					Shape bob1 = new Rect(current0.x, current0.y, current0.brush_size, current0.type, current0.r, current0.g, current0.b,current0.id);
+					ShapeControler bob1 = new ShapeControler(1,current0.x, current0.y, current0.brush_size, current0.type, current0.r, current0.g, current0.b,current0.id);
 					bob1.draw(shapeRenderer, 20, 20, height);
 				}
 			}
