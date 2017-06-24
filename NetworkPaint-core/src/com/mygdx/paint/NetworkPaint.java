@@ -30,6 +30,12 @@ public class NetworkPaint extends ApplicationAdapter {
 	public String ClientIP;
 	public String ServerIP;
 	
+	long startTime = System.currentTimeMillis();
+	long fifoTime = System.currentTimeMillis();
+	long netTime = System.currentTimeMillis();
+	long screenTime = System.currentTimeMillis();
+	long drawTime = System.currentTimeMillis();
+	long endTime = System.currentTimeMillis();
 	ClientThread client=ClientThread.get();
 	ServerThread server=ServerThread.get(); 
 	Point temp;
@@ -99,8 +105,10 @@ public class NetworkPaint extends ApplicationAdapter {
 
 	@Override
 	public void render () {
-
+		startTime = System.currentTimeMillis();
+		System.out.println("resetTime: "+(startTime-endTime));
 		temp=inputProcesor.pollFifo();  //Metoda zdejmuje ostatni element z listy fifo. Jesli elementow nie ma zwraca null
+		fifoTime = System.currentTimeMillis();
 		if(temp != null){
 			switch(temp.id){
 			case (byte)0:{
@@ -128,7 +136,7 @@ public class NetworkPaint extends ApplicationAdapter {
 				inputProcesor.addFifo(received);
 			}
 		}
-		
+		netTime = System.currentTimeMillis();
 		//Czyszczenie ekranu
 		Gdx.gl.glClearColor(1f, 1f, 1f, 1f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
@@ -142,6 +150,7 @@ public class NetworkPaint extends ApplicationAdapter {
 		batch.end();
 		texture.getTexture().dispose();
 		sprite.getTexture().dispose();
+		screenTime = System.currentTimeMillis();
 		for(int i = 0; i < 2; i++){
 			if(current[i] != null){ //Musimy sprawdzic czy przypadkiem PosTab nie jest pusty(null) bo inaczej wywali nam NullPointerException
 				set_kursor(current[i].brush_size,current[i].r,current[i].g,current[i].b);
@@ -172,7 +181,10 @@ public class NetworkPaint extends ApplicationAdapter {
 				}			
 			}
 		}
+		drawTime = System.currentTimeMillis();
 		texture=ScreenUtils.getFrameBufferTexture(); //Pobieramy bufor ekranu do tekstury
+		endTime = System.currentTimeMillis();
+		System.out.println("fifoTime:"+" "+(fifoTime-startTime)+" "+"netTime:"+" "+(netTime-fifoTime)+" "+"screenTime:"+" "+(screenTime-netTime)+" "+"drawTime:"+" "+(drawTime-screenTime)+" "+"endTime:"+" "+(endTime-drawTime));
 	}
 
 
